@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../../vendor/autoload.php';
+require base_path('config/database.php');
+require base_path('vendor/autoload.php');
 
 
 
