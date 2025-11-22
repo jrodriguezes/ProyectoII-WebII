@@ -3,8 +3,8 @@
         enctype="multipart/form-data">
         <input type="hidden" name="action" value="register_user">
         <div class="flex items-center">
-            <div><?php include COMP_PATH . '/theme-toggle.php'; ?></div>
-            <div class="h-8"><?php include COMP_PATH . '/toggle.php'; ?></div>
+            <div><?php require base_path('resources/views/components/theme-toggle.php'); ?></div>
+            <div class="h-8"><?php require base_path('resources/views/components/toggle.php');?></div>
         </div>
         <div class="justify-center flex p-8">
             <h1 class="font-bold text-2xl leading-[1.32]">
@@ -99,6 +99,6 @@
 
         <button type="submit"
             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-        <script src="/assets/js/register-validation.js"></script>
+        <script src="/../resources/js/register-validation.js"></script>
     </form>
 </div>
