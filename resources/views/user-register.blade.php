@@ -1,3 +1,8 @@
+@extends('layouts.app')
+
+@section('title', 'Login')
+
+@section('content')
 <div class="flex items-center justify-center w-full">
     <form action="/post/proxy.php" method="POST" class="w-full max-w-xl" id="registerForm"
         enctype="multipart/form-data">
@@ -102,3 +107,4 @@
         <script src="/../resources/js/register-validation.js"></script>
     </form>
 </div>
+@endsection
