@@ -22,3 +22,4 @@ Route::get('/booking', function () {
 });
 
 
+?>
