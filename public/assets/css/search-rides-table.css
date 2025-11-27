@@ -1,0 +1,292 @@
+
+  /* ===========================================================
+   ✅ CONFIG GLOBAL SIMPLE-DATATABLES + TAILWIND DARK MODE FIX
+   =========================================================== */
+
+  /* ===== Variables globales ===== */
+  :root {
+      --color-gray-50: #f9fafb;
+      --color-gray-100: #f3f4f6;
+      --color-gray-200: #e5e7eb;
+      --color-gray-400: #9ca3af;
+      --color-gray-500: #6b7280;
+      --color-gray-700: #374151;
+      --color-white: #ffffff;
+  }
+
+  .dark {
+      --color-gray-50: #111827;
+      --color-gray-100: #1f2937;
+      --color-gray-200: #e5e7eb;
+      --color-gray-400: #9ca3af;
+      --color-gray-500: #6b7280;
+      --color-gray-700: #374151;
+      --color-white: #111827;
+  }
+
+  /* ===== Estilos base del datatable ===== */
+  .tw-dt-fix .datatable-table,
+  .tw-dt-fix .datatable-table td,
+  .tw-dt-fix .datatable-table th {
+      font-size: .875rem;
+      /* text-sm */
+      line-height: 1.25rem;
+      color: inherit !important;
+  }
+
+  /* Modo claro */
+  body:not(.dark) .tw-dt-fix .datatable-table {
+      color: #111827 !important;
+      /* gray-900 */
+  }
+
+  /* Modo oscuro */
+  .dark .tw-dt-fix .datatable-table,
+  .dark .tw-dt-fix .datatable-table td,
+  .dark .tw-dt-fix .datatable-table th {
+      color: #e5e7eb !important;
+      /* gray-200 */
+      text-shadow: none !important;
+      opacity: 1 !important;
+      mix-blend-mode: normal !important;
+  }
+
+  /* ===== Bordes y hover ===== */
+  .tw-dt-fix .datatable-table th,
+  .tw-dt-fix .datatable-table td {
+      border-bottom: 1px solid var(--color-gray-200, #e5e7eb);
+      background: transparent;
+  }
+
+  .tw-dt-fix .datatable-table th:hover {
+      background: var(--color-gray-50, #f9fafb);
+  }
+
+  .dark .tw-dt-fix .datatable-table th:hover {
+      background: var(--color-gray-700, #374151);
+  }
+
+  .dark .tw-dt-fix .datatable-table th,
+  .dark .tw-dt-fix .datatable-table td {
+      border-color: var(--color-gray-700, #374151);
+  }
+
+  /* ===== Inputs de búsqueda en header ===== */
+  .tw-dt-fix .search-filtering-row input {
+      color: inherit !important;
+      background: transparent !important;
+      border: 1px solid rgba(148, 163, 184, .35) !important;
+      border-radius: .5rem;
+      padding: .375rem .5rem;
+  }
+
+  .tw-dt-fix .search-filtering-row input::placeholder {
+      color: rgba(229, 231, 235, .55);
+      /* gris suave */
+  }
+
+  body:not(.dark) .tw-dt-fix .search-filtering-row input::placeholder {
+      color: rgba(17, 24, 39, .55);
+  }
+
+  /* ===========================================================
+   ✅ DROPDOWN ("entries per page"), INFO Y PAGINACIÓN
+   =========================================================== */
+
+  /* 1) Estructura top/bottom */
+  .tw-dt-fix .datatable-top,
+  .tw-dt-fix .datatable-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      padding: .5rem .625rem;
+  }
+
+  .tw-dt-fix .datatable-top>*,
+  .tw-dt-fix .datatable-bottom>* {
+      float: none !important;
+      /* anula floats del CSS del plugin */
+  }
+
+  /* 2) Heredar color y tipografía */
+  .tw-dt-fix .datatable-top,
+  .tw-dt-fix .datatable-bottom,
+  .tw-dt-fix .datatable-info,
+  .tw-dt-fix .datatable-dropdown label,
+  .tw-dt-fix .datatable-pagination a,
+  .tw-dt-fix .datatable-pagination button {
+      color: inherit !important;
+      font-size: .875rem;
+  }
+
+  /* 3) Selector "entries per page" */
+  .tw-dt-fix .datatable-dropdown label {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+  }
+
+  .tw-dt-fix .datatable-selector {
+      appearance: none;
+      background: transparent;
+      color: inherit;
+      border: 1px solid rgba(148, 163, 184, .35);
+      border-radius: .5rem;
+      padding: .375rem .5rem;
+  }
+
+  .dark .tw-dt-fix .datatable-selector {
+      background: transparent;
+  }
+
+  /* 4) Paginación */
+  .tw-dt-fix .datatable-pagination ul {
+      display: flex;
+      gap: .25rem;
+      padding-left: 0;
+      margin: 0;
+  }
+
+  .tw-dt-fix .datatable-pagination li {
+      list-style: none;
+  }
+
+  .tw-dt-fix .datatable-pagination button {
+      color: inherit;
+      background: transparent;
+      border: 1px solid rgba(148, 163, 184, .35);
+      border-radius: .375rem;
+      padding: .375rem .5rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+  }
+
+  .tw-dt-fix .datatable-pagination button:hover {
+      background: var(--color-gray-50, #f3f4f6);
+  }
+
+  .dark .tw-dt-fix .datatable-pagination button:hover {
+      background: #334155;
+      /* slate-700 aprox */
+  }
+
+  .dark .tw-dt-fix .datatable-pagination .datatable-active button {
+      background: #334155;
+      border-color: #475569;
+      color: #e5e7eb;
+  }
+
+  .tw-dt-fix .datatable-pagination .datatable-disabled button {
+      opacity: .4;
+      cursor: default;
+      pointer-events: none;
+  }
+
+  /* ===========================================================
+   ✅ EXTRA: visibilidad total de select, buscador y paginación
+   =========================================================== */
+
+  /* --- SELECTOR "Entries per page" --- */
+  .tw-dt-fix .datatable-selector {
+      appearance: none;
+      background: var(--color-white, #fff);
+      color: #111827;
+      /* gris oscuro por defecto */
+      border: 1px solid rgba(148, 163, 184, .35);
+      border-radius: .5rem;
+      padding: .375rem .75rem;
+      font-size: .875rem;
+      line-height: 1.25rem;
+  }
+
+  .dark .tw-dt-fix .datatable-selector {
+      background: #1f2937;
+      /* gris oscuro */
+      color: #f9fafb;
+      /* texto claro */
+      border-color: rgba(148, 163, 184, .4);
+  }
+
+  /* Forzamos visibilidad de las opciones del <select> */
+  .tw-dt-fix .datatable-selector option {
+      background: var(--color-white, #fff);
+      color: #111827;
+  }
+
+  .dark .tw-dt-fix .datatable-selector option {
+      background: #1f2937;
+      color: #f9fafb;
+  }
+
+  /* --- BUSCADOR GLOBAL --- */
+  .tw-dt-fix .datatable-search .datatable-input {
+      width: 16rem;
+      max-width: 100%;
+      background: var(--color-white, #fff);
+      color: #111827;
+      border: 1px solid rgba(148, 163, 184, .35);
+      border-radius: .5rem;
+      padding: .375rem .5rem;
+      font-size: .875rem;
+  }
+
+  .dark .tw-dt-fix .datatable-search .datatable-input {
+      background: #1f2937;
+      color: #f9fafb;
+      border-color: rgba(148, 163, 184, .4);
+  }
+
+  .tw-dt-fix .datatable-search .datatable-input::placeholder {
+      color: rgba(107, 114, 128, .7);
+  }
+
+  .dark .tw-dt-fix .datatable-search .datatable-input::placeholder {
+      color: rgba(229, 231, 235, .65);
+  }
+
+
+  /* --- PAGINACIÓN --- */
+  .tw-dt-fix .datatable-pagination button,
+  .tw-dt-fix .datatable-pagination a {
+      color: #111827;
+      background: var(--color-white, #fff);
+      border: 1px solid rgba(148, 163, 184, .35);
+      border-radius: .375rem;
+      padding: .375rem .5rem;
+      cursor: pointer;
+      transition: all .2s ease;
+      text-decoration: none;
+      font-size: .875rem;
+  }
+
+  .dark .tw-dt-fix .datatable-pagination button,
+  .dark .tw-dt-fix .datatable-pagination a {
+      color: #f9fafb;
+      background: #1f2937;
+      border-color: rgba(148, 163, 184, .4);
+  }
+
+  .tw-dt-fix .datatable-pagination button:hover,
+  .tw-dt-fix .datatable-pagination a:hover {
+      background: var(--color-gray-50, #f3f4f6);
+  }
+
+  .dark .tw-dt-fix .datatable-pagination button:hover,
+  .dark .tw-dt-fix .datatable-pagination a:hover {
+      background: #334155;
+  }
+
+  /* Botón activo y deshabilitado */
+  .dark .tw-dt-fix .datatable-pagination .datatable-active button {
+      background: #334155;
+      border-color: #475569;
+      color: #e5e7eb;
+  }
+
+  .tw-dt-fix .datatable-pagination .datatable-disabled button {
+      opacity: .4;
+      cursor: default;
+      pointer-events: none;
+  }
+
