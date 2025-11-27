@@ -2,47 +2,60 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    protected $table = 'users';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    // ajustes del primary key (char(9)
+    protected $primaryKey = 'id';
+    public $incrementing = false;      // autoincrement off
+    protected $keyType = 'string'; // char 9 
+
     protected $fillable = [
-        'name',
+        'id',
+        'first_name',
+        'last_name',
+        'birth_date',
         'email',
+        'phone_number',
+        'profile_photo',
         'password',
+        'user_type',
+        'status',
+        'email_verified_at',
+        'verify_token_hash',
+        'verify_token_expires_at',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
-        'remember_token',
+        'verify_token_hash',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $casts = [
+        'birth_date' => 'date',
+        'email_verified_at' => 'datetime',
+        'verify_token_expires_at' => 'datetime',
+    ];
+
+    // un driver tiene muchos rides
+    public function rides(): HasMany
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(Ride::class, 'driver_id', 'id');
+    }
+
+    // un usuario (pasajero) tiene muchas reservas
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class, 'passenger_id', 'id');
+    }
+
+    // vehiculos asociados (nota: driver_id es char(11) en vehicles) 
+    public function vehicles(): HasMany
+    {
+        return $this->hasMany(Vehicle::class, 'driver_id', 'id');
     }
 }

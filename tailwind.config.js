@@ -1,9 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [],
+  darkMode: 'class',
+  content: [
+    './resources/views/**/*.blade.php',
+    './resources/views/**/*.php',
+    './resources/js/**/*.js',
+    './resources/**/*.php',
+  ],
   theme: {
     extend: {},
   },
   plugins: [],
 }
-
