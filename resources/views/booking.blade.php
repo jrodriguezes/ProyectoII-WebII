@@ -1,12 +1,14 @@
 @php
+
+
     // Si todavía necesitás ReservationModel.php “viejo”:
     require base_path('config/session.php');
-    require base_path('app/Models/ReservationModel.php');
+    require(app_path('Models/Reservation.php'));
 
     // En vez de $_SESSION['user'], usá la sesión de Laravel
     $user = session('user'); // o Auth::user() si ya usás autenticación de Laravel
-@endphp
 
+@endphp
 {{-- Si no hay usuario en sesión --}}
 @if (!$user)
     <div class="p-8">

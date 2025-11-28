@@ -48,4 +48,17 @@ Route::get('/verify-email', [UserController::class, 'verify'])
 
 // Reservaciones
 
-?>
+Route::get('/user-register', function () {
+    return view('user-register');
+});
+
+Route::post('/register', [UserController::class, 'register'])->name('users.register');
+
+// Modificar usuario
+Route::post('/users/{id}/modify', [UserController::class, 'modify'])->name('users.modify');
+
+// Eliminar usuario
+Route::post('/users/{id}/delete', [UserController::class, 'delete'])->name('users.delete');
+
+// Activar usuario
+Route::post('/users/{id}/activate', [UserController::class, 'activate'])->name('users.activate');
