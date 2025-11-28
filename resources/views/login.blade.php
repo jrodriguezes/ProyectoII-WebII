@@ -4,8 +4,8 @@
 
 @section('content')
 <div class="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-
-    <form class="space-y-6" action="/post/login.php" method="POST">
+    <form class="space-y-6" action="{{ route('login.authenticate') }}" method="POST">
+        @csrf
         <h5 class="text-xl font-medium text-gray-900 dark:text-white">Sign in to Aventones</h5>
         <div>
             <label for="floating_email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your

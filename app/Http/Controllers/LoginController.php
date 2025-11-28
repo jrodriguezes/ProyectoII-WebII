@@ -1,47 +1,40 @@
 <?php
-require_once __DIR__ . '/../config/session.php';
-require_once __DIR__ . '/../models/AuthModel.php';
+namespace App\Http\Controllers;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: /login');
-    exit();
+class LoginController extends Controller
+{
+    public function authenticate(Request $request)
+    {
+        $creedentials = $request->validate([
+            'floating_email' => 'required|email',
+            'floating_password' => 'required|string',
+        ]);
+
+        $user = User::where('email', $creedentials['floating_email'])->first();
+
+        if (!$user || !Hash::check($creedentials['floating_password'], $user->password)) {
+            return back()->withErrors([
+                'floating_email' => 'Las credenciales no coinciden con nuestros registros.',
+            ])->withInput($request->only('floating_email'));
+        }// para que no borre el email del form
+
+        if ($user->status !== 'active') {
+            return back()->withErrors([
+                'email' => 'Tu cuenta no está activa. Por favor, verifica tu correo electrónico.',
+            ]);
+        }
+
+        Auth::login($user);
+        return redirect()->route('home');
+    }
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login');
+    }
 }
-
-$email = trim($_POST['floating_email'] ?? '');
-$password = $_POST['floating_password'] ?? '';
-
-$user = findUserByEmail($email);
-
-if (!$user) {
-    header('Location: /login?error=notfound');
-    exit();
-}
-
-if ($user['status'] !== 'active') {
-    header('Location: /login?error=inactive');
-    exit();
-}
-
-if (!password_verify($password, $user['password'])) {
-    header('Location: /login?error=wrongpass');
-    exit();
-}
-
-$_SESSION['user'] = [
-    'id' => $user['id'],
-    'first_name' => $user['first_name'],
-    'last_name' => $user['last_name'],
-    'birth_date' => $user['birth_date'],
-    'phone_number' => $user['phone_number'],
-    'user_type' => $user['user_type'],
-    'email' => $user['email'],
-    'profile_photo' => $user['profile_photo'],
-];
-
-if ($user['user_type'] === 'admin') {
-    header('Location: /home');
-    exit();
-} else {
-    header('Location: /home');
-    exit();
-}
+?>

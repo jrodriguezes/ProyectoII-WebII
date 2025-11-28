@@ -3,13 +3,17 @@
 @section('title', 'Login')
 
 @section('content')
-<div class="flex items-center justify-center w-full">
-    <form action="/post/proxy.php" method="POST" class="w-full max-w-xl" id="registerForm"
-        enctype="multipart/form-data">
-        <input type="hidden" name="action" value="register_user">
-        <div class="flex items-center">
-            <div><?php require base_path('resources/views/components/theme-toggle.php'); ?></div>
-            <div class="h-8"><?php require base_path('resources/views/components/toggle.php');?></div>
+    <div class="flex items-center justify-center w-full">
+
+        <form action="{{ route('user.register') }}" method="POST" class="w-full max-w-xl" id="registerForm"
+            enctype="multipart/form-data">
+            {{-- token que requiere laravel para poder hacer un cambio en la bd, lo que hace es: mete un token en la
+            sesion,
+            despues compara el token de la sesion con el token del form y si es diferente no hace ninguna peticion--}}
+            @csrf
+            <div class="flex items-center">
+                <div>@include('components.theme-toggle')</div>
+                <div class="h-8">@include('components.toggle')</div>
         </div>
         <div class="justify-center flex p-8">
             <h1 class="font-bold text-2xl leading-[1.32]">
@@ -96,15 +100,15 @@
                     class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                     required />
                 <!-- <div class="mt-3">
-                        <img id="preview"
-                            class="hidden w-32 h-32 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
-                            alt="Vista previa" />
-                    </div> -->
+                                        <img id="preview"
+                                            class="hidden w-32 h-32 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
+                                            alt="Vista previa" />
+                                    </div> -->
             </div>
 
-        <button type="submit"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-        <script src="/../resources/js/register-validation.js"></script>
-    </form>
-</div>
+            <button type="submit"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+            <script src="/assets/js/register-validation.js"></script>
+        </form>
+    </div>
 @endsection
