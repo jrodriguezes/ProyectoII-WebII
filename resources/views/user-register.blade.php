@@ -4,9 +4,13 @@
 
 @section('content')
     <div class="flex items-center justify-center w-full">
-        <form action="/post/proxy.php" method="POST" class="w-full max-w-xl" id="registerForm"
+
+        <form action="{{ route('user.register') }}" method="POST" class="w-full max-w-xl" id="registerForm"
             enctype="multipart/form-data">
-            <input type="hidden" name="action" value="register_user">
+            {{-- token que requiere laravel para poder hacer un cambio en la bd, lo que hace es: mete un token en la
+            sesion,
+            despues compara el token de la sesion con el token del form y si es diferente no hace ninguna peticion--}}
+            @csrf
             <div class="flex items-center">
                 <div>@include('components.theme-toggle')</div>
                 <div class="h-8">@include('components.toggle')</div>
@@ -96,10 +100,10 @@
                     class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                     required />
                 <!-- <div class="mt-3">
-                        <img id="preview"
-                            class="hidden w-32 h-32 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
-                            alt="Vista previa" />
-                    </div> -->
+                                        <img id="preview"
+                                            class="hidden w-32 h-32 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
+                                            alt="Vista previa" />
+                                    </div> -->
             </div>
 
             <button type="submit"
