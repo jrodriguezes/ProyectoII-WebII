@@ -79,35 +79,5 @@ class RideController extends Controller
         return redirect()->back()->with('success', 'Viaje eliminado.');
     }
 
-    /**
-     * Reservar ride (equivalente a book_ride)
-     */
-    public function book(Request $request, Ride $ride)
-    {
-        $request->validate([
-            // si usas login, podrías usar auth()->id() en vez de user_id
-            'user_id'     => 'required|integer',
-            'seats'       => 'required|integer|min:1',
-        ]);
-
-        // Verificar asientos disponibles
-        if ($ride->available_seats < $request->seats) {
-            return redirect()->back()
-                ->withErrors(['seats' => 'No hay suficientes asientos disponibles.']);
-        }
-
-        // Crear reserva (tabla reservations)
-        Reservation::create([
-            'ride_id'  => $ride->id,
-            'user_id'  => $request->user_id,
-            'seats'    => $request->seats,
-            'status'   => 'waiting', // ajusta a tus valores
-        ]);
-
-        // Actualizar asientos disponibles
-        $ride->available_seats -= $request->seats;
-        $ride->save();
-
-        return redirect()->back()->with('success', 'Viaje reservado correctamente.');
-    }
+    
 }
