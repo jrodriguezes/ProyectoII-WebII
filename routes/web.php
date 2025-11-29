@@ -17,10 +17,6 @@ Route::get('/email-verified', function () {
     return view('email-verified');
 });
 
-Route::get('/user-register', function () {
-    return view('user-register');
-});
-
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('/edit-profile', function () {
