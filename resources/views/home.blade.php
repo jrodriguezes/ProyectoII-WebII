@@ -421,6 +421,7 @@
             <div class="flex items-center">
                 <div class="p-8 pl-0 pb-0 pt-0">
                     <h2 class="text-lg font-semibold">Your vehicles</h2>
+                    
                 </div>
                 <div>
                     <!-- Modal toggle -->
@@ -454,7 +455,8 @@
                                 </button>
                             </div>
                             <!-- Modal body -->
-                            <form class="p-4 md:p-5" action="/post/proxy.php" method="POST" enctype="multipart/form-data">
+                            <form class="p-4 md:p-5" action="{{ route('vehicle.register') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
                                 <input type="hidden" name="action" value="register_vehicle">
                                 <div class="grid gap-4 mb-4 grid-cols-2 text-center">
                                     <div class="col-span-2">
@@ -515,7 +517,7 @@
                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vehicle
                                             picture
                                         </label>
-                                        <input type="file" name="vehicle-picture" id="vehicle-picture"
+                                        <input type="file" name="vehicle_picture" id="vehicle-picture"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                             required="">
                                     </div>
@@ -552,18 +554,19 @@
                 </thead>
 
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
-                    @if (empty($vehicles))
+                    @if (empty($vehiclesList))
                     <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white ">
                         <td class="px-3 py-2 whitespace-nowrap">No vehicles have been registered yet.</td>
                     </tr>
                     @else
-                    @foreach ($vehicles as $vehicle)
+                    @foreach ($vehiclesList as $vehicle)
                     @php
                         $uid = $vehicle->plate_id;
                         $mid = "vehicle-modify-modal-$uid";
                         $did = "vehicle-delete-modal-$uid";
                         $fileId = "modify-vehicle-picture-$uid";
-                        $imgUrl = rtrim(BASE_URL ?? '', '/') . $vehicle->vehicle_picture;
+                        $imgUrl = asset('storage/' . $vehicle->vehicle_picture);
+
                     @endphp
                     <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
                         <td class="px-3 py-2 whitespace-nowrap">

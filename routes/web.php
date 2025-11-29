@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
@@ -44,6 +45,8 @@ Route::get('/verify-email', [UserController::class, 'verify'])
     ->name('verify.email');
 
 // Vehiculo
+
+Route::post('/home', [VehicleController::class,'store'])->name('vehicle.register');
 
 // Viajes
 

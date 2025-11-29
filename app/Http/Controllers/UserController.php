@@ -28,8 +28,6 @@ class UserController extends Controller
             'photo' => 'nullable|image|max:2048', // 2 MB
         ]);
 
-        
-
         // subir foto
         $photoPath = null;
         if ($request->hasFile('photo')) {
