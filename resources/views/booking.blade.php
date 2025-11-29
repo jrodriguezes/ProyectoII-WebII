@@ -1,37 +1,28 @@
 @php
-
-
-    // Si todavía necesitás ReservationModel.php “viejo”:
     require base_path('config/session.php');
     require(app_path('Models/Reservation.php'));
 
-    // En vez de $_SESSION['user'], usá la sesión de Laravel
-    $user = session('user'); // o Auth::user() si ya usás autenticación de Laravel
+    $user = session('user');
 
 @endphp
-{{-- Si no hay usuario en sesión --}}
-@if (!$user)
-    <div class="p-8">
-        <h1 class="text-2xl font-bold mb-4">No hay sesión activa</h1>
-        <p class="mb-4">Por favor inicia sesión para ver tus reservas.</p>
-        <a href="/login" class="text-white bg-blue-600 px-4 py-2 rounded-md">
-            Ir a Login
-        </a>
-    </div>
-@else
+
+
     <div class="min-h-full w-full">
         <div>
-            <?php    require base_path('resources/views/layouts/navbar.blade.php') ?>
+            
+            <?php  require base_path('resources/views/layouts/navbar.blade.php') ?>
         </div>
 
         <div class="ml-8">
             <div class="flex items-center">
-                <div><?php    require base_path('resources/views/components/theme-toggle.php'); ?></div>
+                <div><?php  require base_path('resources/views/components/theme-toggle.php'); ?></div>
             </div>
             <div>
+               
                 <h1 class="text-2xl font-bold">Bienvenido, <?= htmlspecialchars($user['first_name']) ?> 👋</h1>
                 <p class="text-gray-500">Tu rol actual es: <strong><?= htmlspecialchars($user['user_type']) ?></strong>
                 </p>
+               
             </div>
         </div>
 

@@ -5,6 +5,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
 
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+
 Route::get('/login', function () {
     return view('login');
 })->name('login');

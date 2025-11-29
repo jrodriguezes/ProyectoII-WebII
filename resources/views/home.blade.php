@@ -13,10 +13,18 @@
             @include('components.theme-toggle')
         </div>
         <div>
-            <h1 class="text-2xl font-bold">Bienvenido, {{ $currentUser->first_name }} 👋</h1>
-            <p class="text-gray-500">Tu rol actual es: <strong> {{ $currentUser->user_type }} </strong></p>
+
+            @auth
+                <h1 class="text-2xl font-bold">Bienvenido, {{ $currentUser->first_name }} 👋</h1>
+                <p class="text-gray-500">Tu rol actual es: <strong> {{ $currentUser->user_type }} </strong></p>
+            @endauth
+
+            @guest
+                <h1 class="text-2xl font-bold">Bienvenido, Invitado 👋</h1>
+            @endguest
         </div>
     </div>
+    @auth
     @if (in_array($currentUser->user_type, ['driver', 'driver&passenger']))
         <div class="max-h-[46rem] overflow-x-auto p-8">
             <div class="flex items-center">
@@ -769,7 +777,7 @@
                 </tbody>
             </table>
         </div>
-
+                                                 
     @elseif (in_array($currentUser->user_type, ['passenger', 'driver&passenger']))
         <div class="max-h-[46rem] overflow-x-auto p-8">
             <div class="flex items-center">
@@ -1180,5 +1188,187 @@
             </tbody>
         </table>
     @endif
+    @endauth   
+    
+    @guest
+        <div class="max-h-[46rem] overflow-x-auto p-8">
+            <div class="flex items-center">
+                <h2 class="text-base font-semibold text-gray-900 dark:text-gray-100 text-xl">Search rides</h2>
+            </div>
+
+            <div class="relative overflow-auto shadow-md sm:rounded-lg tw-dt-fix">
+                <table id="filter-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <span class="flex items-center">
+                                    Select ride
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                            </th>
+                            <th>
+                                <span class="flex items-center">
+                                    Model
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                            </th>
+                            <th>
+                                <span class="flex items-center">
+                                    Year
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                            </th>
+                            <th>
+                                <span class="flex items-center">
+                                    Brand
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                            </th>
+                            <th>
+                                <span class="flex items-center">
+                                    Available seats
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                            </th>
+                            <th>
+                                <span class="flex items-center">
+                                    Price per seat
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                            </th>
+                            <th>
+                                <span class="flex items-center">
+                                    Date
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                            </th>
+                            <th>
+                                <span class="flex items-center">
+                                    Time
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                            </th>
+                            <th>
+                                <span class="flex items-center">
+                                    Departure place
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                            </th>
+                            <th>
+                                <span class="flex items-center">
+                                    Arrival place
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                            </th>
+                            <th>
+                                <span class="flex items-center">
+                                    Actions
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+        
+                    <tbody class="align-middle">
+                        @foreach ($allRidesList as $ride)
+                            @php
+                                $modalId = 'confirm-ride-' . $ride->id;
+                            @endphp
+
+                        <tr class="text-center align-middle justify-center">
+                            <td>{{ $ride->plate_id }}</td>
+                            <td>{{ $ride->model }}</td>
+                            <td>{{ $ride->year }}</td>
+                            <td>{{ $ride->brand }}</td>
+                            <td>{{ $ride->seats_offered }}</td>
+                            <td>{{ $ride->price_per_seat }}</td>
+                            <td>{{ $ride->departure_date->format('Y-m-d') }}</td>
+                            <td>{{ $ride->departure_date->format('H:i') }}</td>
+                            <td>{{ $ride->origin }}</td>
+                            <td>{{ $ride->destination }}</td>
+
+                            <td>
+                                @if ($ride->seats_offered == 0)
+                                    <p>There's not more available seats</p>
+
+                                @else
+                                    <button
+                                        data-modal-target="{{ $modalId }}"
+                                        data-modal-toggle="{{ $modalId }}"
+                                        class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700">
+                                        Book ride
+                                    </button>
+                                @endif
+                            </td>
+                        </tr>
+
+                        <div id="{{ $modalId }}" aria-hidden="true"
+                            class="hidden fixed inset-0 z-50 flex items-center justify-center">
+                            <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
+                                <div class="flex items-center justify-between border-b pb-2 mb-4">
+                                    <h3 class="text-lg font-semibold">Confirm selected ride</h3>
+                                    <button data-modal-toggle="{{ $modalId }}" class="p-2">✕</button>
+                                </div>
+
+                                <form action="/post/proxy.php" method="POST">
+                                    <input type="hidden" value="{{ $ride->id }}" name="ride_id">
+                                    <input type="hidden" value="book_ride" name="action">
+                                    <input type="hidden" name="user_id" value="{{ $currentUser->id }}">
+                                    <p class="mb-4">Are you sure you want to afiliate with this ride?</p>
+                                    <button class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded">Confirm
+                                        ride</button>
+                                </form>
+                            </div>
+                        </div>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endguest
 </div>
 @endsection
