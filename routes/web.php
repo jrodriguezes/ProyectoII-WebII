@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\HomeController;
 
 Route::get('/login', function () {
     return view('login');
@@ -16,9 +17,7 @@ Route::get('/user-register', function () {
     return view('user-register');
 });
 
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('/edit-profile', function () {
     return view('edit-profile');
@@ -38,6 +37,8 @@ Route::post('/user-register', [UserController::class, 'store'])->name('user.regi
 
 // Login & Verification de email 
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
+
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/verify-email', [UserController::class, 'verify'])
     ->name('verify.email');
