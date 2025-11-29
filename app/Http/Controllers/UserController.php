@@ -13,6 +13,7 @@ class UserController extends Controller
 {
     public function store(Request $request)
     {
+       
         // validar datos
         $data = $request->validate([
             'floating_id' => 'string|unique:users,id',
@@ -54,6 +55,8 @@ class UserController extends Controller
             'verify_token_hash' => $verifyHash,
             'verify_token_expires_at' => $verifyExpiresAt,
         ]);
+
+       
 
         // enviar correo de verificacion
         $verifyUrl = route('verify.email', [

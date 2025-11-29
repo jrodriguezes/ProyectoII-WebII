@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
@@ -15,10 +16,6 @@ Route::get('/login', function () {
 
 Route::get('/email-verified', function () {
     return view('email-verified');
-});
-
-Route::get('/user-register', function () {
-    return view('user-register');
 });
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -48,6 +45,8 @@ Route::get('/verify-email', [UserController::class, 'verify'])
     ->name('verify.email');
 
 // Vehiculo
+
+Route::post('/home', [VehicleController::class,'store'])->name('vehicle.register');
 
 // Viajes
 
