@@ -837,6 +837,16 @@
                             </th>
                             <th>
                                 <span class="flex items-center">
+                                    Driver
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                            </th>
+                            <th>
+                                <span class="flex items-center">
                                     Available seats
                                     <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                         width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -909,16 +919,18 @@
                     </thead>
         
                     <tbody class="align-middle">
-                        @foreach ($ridesList as $ride)
+                        @foreach ($allRidesList as $ride)
                             @php
                                 $modalId = 'confirm-ride-' . $ride->id;
                             @endphp
 
                         <tr class="text-center align-middle justify-center">
-                            <td>{{ $ride->plate_id }}</td>
-                            <td>{{ $ride->model }}</td>
-                            <td>{{ $ride->year }}</td>
-                            <td>{{ $ride->brand }}</td>
+                        
+                            <td>{{ $ride->vehicle->plate_id }}</td>
+                            <td>{{ $ride->vehicle->model }}</td>
+                            <td>{{ $ride->vehicle->year }}</td>
+                            <td>{{ $ride->vehicle->brand }}</td>
+                            <td>{{ "{$ride->driver->first_name} {$ride->driver->last_name}" }}</td>
                             <td>{{ $ride->seats_offered }}</td>
                             <td>{{ $ride->price_per_seat }}</td>
                             <td>{{ $ride->departure_date->format('Y-m-d') }}</td>
@@ -930,7 +942,7 @@
                                 @if ($currentUser->id == $ride->driver_id)
                                     <p>Your ride</p>
 
-                                @elseif (in_array($ride->id, $reservedRideIds, true))
+                                @elseif (in_array($ride->id, $reservedRideIds))
                                     <p>You already booked this ride</p>
 
                                 @elseif ($ride->seats_offered == 0)

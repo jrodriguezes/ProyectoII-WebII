@@ -13,7 +13,8 @@ class HomeController extends Controller
     {
         $currentUser = auth()->user();
 
-        $allRidesList = Ride::all();
+        $allRidesList = Ride::with(['vehicle', 'driver'])->get();
+        //dd($allRidesList);
 
         // si el usuario no esta logeado lo que haces mandar al home sin llenar el resto de datos por que da problema
         // por que da problemas que no pueda traer las listas
@@ -34,13 +35,19 @@ class HomeController extends Controller
 
         $ridesList = Ride::where('driver_id', $currentUser->id)->get();
 
-        $reservationList = Reservation::where('ride_id', $currentUser->id)->get();
+        //dd($ridesList);
+
+        $reservationList = Reservation::all();
+
+        //dd($reservationList);
 
         $userList = User::where('id')->get();
 
+        $reservedRideIds = Reservation::where('passenger_id', $currentUser->id)
+            ->pluck('ride_id')
+            ->toArray();
 
-
-        return view('home', compact('currentUser', 'vehiclesList', 'ridesList', 'reservationList', 'userList', 'allRidesList'));
+        return view('home', compact('currentUser', 'vehiclesList', 'ridesList', 'reservationList', 'userList', 'allRidesList', 'reservedRideIds'));
     }
 }
 
