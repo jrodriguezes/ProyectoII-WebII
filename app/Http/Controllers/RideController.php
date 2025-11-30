@@ -80,9 +80,18 @@ class RideController extends Controller
     /**
      * Eliminar ride (equivalente a delete_ride)
      */
-    public function destroy(Ride $ride)
+    public function destroy(Request $request)
     {
-        $ride->delete();
+        //dd($request->all());
+
+        $request->validate([
+            'ride_id' => 'required|integer',
+        ]);
+
+        Ride::where('id', $request->ride_id)->update([
+            'status' => 'inactive'
+        ]);
+        
 
         return redirect()->back()->with('success', 'Viaje eliminado.');
     }

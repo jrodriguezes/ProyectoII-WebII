@@ -404,7 +404,8 @@
                                         <button data-modal-toggle="{{ $did }}" class="p-2">✕</button>
                                     </div>
 
-                                    <form action="/post/proxy.php" method="POST">
+                                    <form action="{{ route('ride.delete') }}" method="POST">
+                                        @csrf
                                         <input type="hidden" name="action" value="delete_ride">
                                         <input type="hidden" name="ride_id" value="{{$uid}}">
                                         <p class="mb-4">Are you sure you want to delete this ride?</p>

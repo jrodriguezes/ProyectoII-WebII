@@ -68,6 +68,10 @@ Route::post('/home/ride/register', [RideController::class, 'store'])
 Route::post('/home/ride/edit', [RideController::class, 'update'])
     ->name('ride.edit'); 
 
+//desactivar ride
+Route::post('/home/ride/delete', [RideController::class, 'destroy'])
+    ->name('ride.delete');
+
 // Reservaciones
 
 Route::get('/user-register', function () {
