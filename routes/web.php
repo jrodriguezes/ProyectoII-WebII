@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RideController;
 use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -59,6 +60,9 @@ Route::post('/home/vehicle/delete', [VehicleController::class, 'destroy'])
     ->name('vehicle.delete'); 
 
 // Viajes
+Route::post('/home/ride/register', [RideController::class, 'store'])
+    ->name('ride.register'); 
+
 
 // Reservaciones
 
