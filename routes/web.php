@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RideController;
 use App\Http\Controllers\VehicleController;
+use App\Models\Reservation;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
@@ -73,7 +75,12 @@ Route::post('/home/ride/delete', [RideController::class, 'destroy'])
     ->name('ride.delete');
 
 // Reservaciones
+Route::post('/home/reservation/register', [ReservationController::class, 'book'])
+    ->name('reservation.register');
 
+
+
+//no se que hace esta ruta pero bueno no la toco mejor por si acaso
 Route::get('/user-register', function () {
     return view('user-register');
 });
