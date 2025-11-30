@@ -64,7 +64,8 @@
                             </button>
                         </div>
                         <!-- Modal body -->
-                        <form class="p-4 md:p-5" action="/post/proxy.php" method="POST">
+                        <form class="p-4 md:p-5" action="{{ route('ride.register') }}" method="POST">
+                            @csrf
                             <input type="hidden" name="action" value="register_ride">
                             <div class="grid gap-4 mb-4 grid-cols-2">
                                 <div class="col-span-2">
@@ -94,7 +95,7 @@
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Place arrival (San Carlos)
                                     </label>
-                                    <select id="departure" name="departure" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                                    <select id="departure" name="origin" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
                     focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
                     dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
                     dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
@@ -119,7 +120,7 @@
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Place departure (San Carlos)
                                     </label>
-                                    <select id="arrival" name="arrival" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                                    <select id="arrival" name="destination" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
                     focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
                     dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
                     dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
@@ -152,7 +153,7 @@
                                     <label for="price_seats"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price per
                                         seat</label>
-                                    <input type="number" name="price_seats" id="price_seats"
+                                    <input type="number" name="seats_offered" id="price_seats"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         placeholder="$10" required="">
                                 </div>
@@ -160,7 +161,7 @@
                                     <label for="seats"
                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seats
                                     </label>
-                                    <input type="number" name="seats" id="seats"
+                                    <input type="number" name="price_per_seat" id="seats"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         placeholder="5" required="">
                                 </div>
@@ -599,7 +600,7 @@
                             <div id="{{ $mid }}" tabindex="-1" aria-hidden="true"
                                 class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                 <div class="relative p-4 w-full max-w-md max-h-full">
-                                    <!-- Modal content -->
+                                    <!-- Modal content modify -->
                                     <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
                                         <!-- Modal header -->
                                         <div
@@ -620,8 +621,8 @@
                                             </button>
                                         </div>
                                         <!-- Modal body -->
-                                        <form class="p-4 md:p-5" action="/post/proxy.php" method="POST"
-                                            enctype="multipart/form-data">
+                                        <form class="p-4 md:p-5" action="{{ route('vehicle.edit') }}" method="POST" enctype="multipart/form-data">
+                                            @csrf
                                             <input type="hidden" name="action" value="modify_vehicle">
                                             <div class="grid gap-4 mb-4 grid-cols-2">
                                                 <div class="col-span-2">
@@ -698,7 +699,7 @@
                                                         </h-2>
                                                         <img src="{{ $imgUrl }}" alt="Vehicle picture"
                                                             class="h-12 w-24 object-cover rounded-lg mx-auto">
-                                                        <input type="file" name="modify-vehicle-picture" id="{{ $fileId }}"
+                                                        <input type="file" name="modify_vehicle_picture" id="{{ $fileId }}"
                                                             accept="image/*"
                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                 </div>
@@ -726,7 +727,7 @@
                             <div id="{{ $did }}" tabindex="-1" aria-hidden="true"
                                 class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                 <div class="relative p-4 w-full max-w-md max-h-full">
-                                    <!-- Modal content -->
+                                    <!-- Modal content datlete -->
                                     <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
                                         <!-- Modal header -->
                                         <div
@@ -747,7 +748,8 @@
                                             </button>
                                         </div>
                                         <!-- Modal body -->
-                                        <form class="p-4 md:p-5" action="/post/proxy.php" method="POST">
+                                        <form class="p-4 md:p-5" action="{{ route('vehicle.delete') }}" method="POST">
+                                            @csrf
                                             <input type="hidden" name="action" value="delete_vehicle">
                                             <div class="grid gap-4 mb-4 grid-cols-2 text-center">
                                                 <div class="col-span-2">
