@@ -46,7 +46,17 @@ Route::get('/verify-email', [UserController::class, 'verify'])
 
 // Vehiculo
 
-Route::post('/home', [VehicleController::class,'store'])->name('vehicle.register');
+//registrar vehiculos
+Route::post('/home/vehicle/register', [VehicleController::class, 'store'])
+    ->name('vehicle.register');
+
+// Editar vehículo
+Route::post('/home/vehicle/edit', [VehicleController::class, 'update'])
+
+    ->name('vehicle.edit');
+//Desactivar vehiculo
+Route::post('/home/vehicle/delete', [VehicleController::class, 'destroy'])
+    ->name('vehicle.delete'); 
 
 // Viajes
 
