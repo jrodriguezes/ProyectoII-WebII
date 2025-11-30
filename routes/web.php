@@ -60,9 +60,17 @@ Route::post('/home/vehicle/delete', [VehicleController::class, 'destroy'])
     ->name('vehicle.delete'); 
 
 // Viajes
+// insertar ride
 Route::post('/home/ride/register', [RideController::class, 'store'])
     ->name('ride.register'); 
 
+// actualizar ride
+Route::post('/home/ride/edit', [RideController::class, 'update'])
+    ->name('ride.edit'); 
+
+//desactivar ride
+Route::post('/home/ride/delete', [RideController::class, 'destroy'])
+    ->name('ride.delete');
 
 // Reservaciones
 
