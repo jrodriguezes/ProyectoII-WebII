@@ -2,41 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ride;
+
 use Illuminate\Http\Request;
 use App\Models\Reservation;
+use App\Models\Ride;
 
 class ReservationController extends Controller
 {
      /**
      * Reservar ride (equivalente a book_ride)
      */
-    public function book(Request $request, Ride $ride)
+    public function book(Request $request)
     {
-        $request->validate([
-            // si usas login, podrías usar auth()->id() en vez de user_id
-            'user_id'     => 'required|integer',
-            'seats'       => 'required|integer|min:1',
+        $data = $request->validate([
+            'ride_id'       => 'required|integer',
         ]);
 
-        // Verificar asientos disponibles
-        if ($ride->available_seats < $request->seats) {
-            return redirect()->back()
-                ->withErrors(['seats' => 'No hay suficientes asientos disponibles.']);
-        }
+        //dd($data);
 
         // Crear reserva (tabla reservations)
         Reservation::create([
-            'ride_id'  => $ride->id,
-            'user_id'  => $request->user_id,
-            'seats'    => $request->seats,
-            'status'   => 'waiting', // ajusta a tus valores
+            'ride_id'  => $data['ride_id'],
+            'passenger_id' => auth()->id(),
+            'status'   => 'pending',
         ]);
 
-        // Actualizar asientos disponibles
-        $ride->available_seats -= $request->seats;
-        $ride->save();
-
+        Ride::where('id', $data['ride_id'])->decrement('seats_offered');
+        
         return redirect()->back()->with('success', 'Viaje reservado correctamente.');
     }
 
@@ -69,12 +61,15 @@ class ReservationController extends Controller
     /**
      * Cancelar una reservación (cancel_reservation)
      */
-    public function cancel(string $id)
+    public function cancel(Request $request)
     {
-        $reservation = Reservation::findOrFail($id);
+        $request ->validate([
+            'id' => 'required|integer',
+        ]);
 
-        $reservation->status = 'cancelled'; // o 'canceled', según tu tabla
-        $reservation->save();
+        Reservation::where('id', $request->id)->update([
+            'status'=> 'cancelled',
+        ]);
 
         return redirect()->back()->with('success', 'Reservación cancelada.');
     }

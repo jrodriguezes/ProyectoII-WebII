@@ -967,7 +967,8 @@
                                     <button data-modal-toggle="{{ $modalId }}" class="p-2">✕</button>
                                 </div>
 
-                                <form action="/post/proxy.php" method="POST">
+                                <form action="{{ route('reservation.register') }}" method="POST">
+                                    @csrf
                                     <input type="hidden" value="{{ $ride->id }}" name="ride_id">
                                     <input type="hidden" value="book_ride" name="action">
                                     <input type="hidden" name="user_id" value="{{ $currentUser->id }}">

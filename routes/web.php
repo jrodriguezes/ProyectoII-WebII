@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RideController;
 use App\Http\Controllers\VehicleController;
+use App\Models\Reservation;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
@@ -30,9 +33,7 @@ Route::get('/check-email', function () {
 })->name('check-email');
 ;
 
-Route::get('/booking', function () {
-    return view('booking');
-});
+
 
 // Usuario
 Route::post('/user-register', [UserController::class, 'store'])->name('user.register');
@@ -73,7 +74,16 @@ Route::post('/home/ride/delete', [RideController::class, 'destroy'])
     ->name('ride.delete');
 
 // Reservaciones
+// registar serservacion
+Route::post('/home/reservation/register', [ReservationController::class, 'book'])
+    ->name('reservation.register');
 
+//cancelar reservacion
+Route::post('/home/reservation/cancel', [ReservationController::class, 'cancel'])
+    ->name('reservation.cancel');  
+
+
+//no se que hace esta ruta pero bueno no la toco mejor por si acaso
 Route::get('/user-register', function () {
     return view('user-register');
 });
@@ -88,3 +98,6 @@ Route::post('/users/{id}/delete', [UserController::class, 'delete'])->name('user
 
 // Activar usuario
 Route::post('/users/{id}/activate', [UserController::class, 'activate'])->name('users.activate');
+
+// booking
+Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
