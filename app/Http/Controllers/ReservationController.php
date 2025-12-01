@@ -61,12 +61,15 @@ class ReservationController extends Controller
     /**
      * Cancelar una reservación (cancel_reservation)
      */
-    public function cancel(string $id)
+    public function cancel(Request $request)
     {
-        $reservation = Reservation::findOrFail($id);
+        $request ->validate([
+            'id' => 'required|integer',
+        ]);
 
-        $reservation->status = 'cancelled'; // o 'canceled', según tu tabla
-        $reservation->save();
+        Reservation::where('id', $request->id)->update([
+            'status'=> 'cancelled',
+        ]);
 
         return redirect()->back()->with('success', 'Reservación cancelada.');
     }
