@@ -63,10 +63,8 @@
                                     @if ($reservation->status == 'pending')
                                         <form action=" {{ route('reservation.cancel') }}" method="POST">
                                             @csrf
-                                            <input type="hidden" name="id" id="id"
-                                                        value="{{ $reservation->id }}">
+                                            <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
                                             <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">
-
                                                 Cancel
                                             </button>
                                         </form>
@@ -77,7 +75,82 @@
                     </tbody>
                 </table>
             </div>
-        @endif
+        @elseif($currentUser->user_type == 'driver')
+            <div class="w-full overflow-x-auto pr-0 -mr-4 sm:-mr-6 md:-mr-8 lg:-mr-10">
+                <div class="p-8">
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full border-collapse divide-y-2 divide-gray-200 dark:divide-gray-700 text-center">
+                            <thead class="sticky top-0 bg-white dark:bg-gray-900">
+                                <tr class="font-medium text-gray-900 dark:text-white">
+                                    <th>Reservation ID</th>
+                                    <th>Plate vehicle</th>
+                                    <th>Ride</th>
+                                    <th>Passenger ID</th>
+                                    <th>Passenger</th>
+                                    <th>Status</th>
+                                    <th>Created at</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
+                                @foreach ($reservationsAsDriver as $reservation)
+                                    <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $reservation->id }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $reservation->ride->vehicle->plate_id }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $reservation->ride->name }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $reservation->passenger_id }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $reservation->passenger->first_name . ' ' . $reservation->passenger->last_name }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $reservation->status }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $reservation->created_at }}
+                                        </td>
 
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            <form action=" {{ route('reservation.accept') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
+                                                <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">
+                                                    accept
+                                                </button>
+                                            </form>
+
+
+                                            <form action=" {{ route('reservation.reject') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
+                                                <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">
+                                                    reject
+                                                </button>
+                                            </form>
+
+
+                                            <form action=" {{ route('reservation.cancel') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
+                                                <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">
+                                                    Cancel
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 @endsection

@@ -35,27 +35,34 @@ class ReservationController extends Controller
     /**
      * Aceptar una reservación (accept_reservation)
      */
-    public function accept(string $id)
+    public function accept(Request $request)    
     {
-        $reservation = Reservation::findOrFail($id);
+        $request ->validate([
+            'id' => 'required|integer',
+        ]);
 
-        $reservation->status = 'accepted'; // ajusta al valor que uses en la BD
-        $reservation->save();
+        Reservation::where('id', $request->id)->update([
+            'status'=> 'accepted',
+        ]);
 
-        return redirect()->back()->with('success', 'Reservación aceptada correctamente.');
+        return redirect()->back()->with('success', 'Reservación denegada.');
     }
 
     /**
      * Rechazar una reservación (reject_reservation)
      */
-    public function reject(string $id)
+    public function reject(Request $request)
     {
-        $reservation = Reservation::findOrFail($id);
+        $request ->validate([
+            'id' => 'required|integer',
+        ]);
 
-        $reservation->status = 'rejected'; // ajusta al valor que uses
-        $reservation->save();
+        Reservation::where('id', $request->id)->update([
+            'status'=> 'rejected',
+        ]);
 
-        return redirect()->back()->with('success', 'Reservación rechazada.');
+        return redirect()->back()->with('success', 'Reservación denegada.');
+    
     }
 
     /**
