@@ -10,7 +10,7 @@ class BookingController extends Controller
 {
     public function index()
     {
-
+        //hola
         $currentUser = auth()->user();
 
         if ($currentUser->user_type == "passenger") {
