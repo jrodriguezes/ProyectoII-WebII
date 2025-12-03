@@ -22,10 +22,25 @@ class BookingController extends Controller
             ])
                 ->where('passenger_id', $currentUser->id)
                 ->get();
-            
+
             //dd($reservationsAsPassenger);
 
             return view('booking', compact('currentUser', 'reservationsAsPassenger'));
+        }
+
+        if ($currentUser->user_type == 'driver') {
+            $reservationsAsDriver = Reservation::with([
+                'ride.vehicle.driver',
+                'passenger',
+            ])
+                ->whereHas('ride', function ($q) use ($currentUser) {
+                    $q->where('driver_id', $currentUser->id);
+                })
+                ->get();
+
+            //dd($reservationsAsDriver);      
+
+            return view('booking', compact('currentUser', 'reservationsAsDriver'));
         }
 
 

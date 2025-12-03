@@ -82,6 +82,14 @@ Route::post('/home/reservation/register', [ReservationController::class, 'book']
 Route::post('/home/reservation/cancel', [ReservationController::class, 'cancel'])
     ->name('reservation.cancel');  
 
+//accept reservaciom
+Route::post('/home/reservation/accept', [ReservationController::class, 'accept'])
+    ->name('reservation.accept');  
+
+//accept reservaciom
+Route::post('/home/reservation/reject', [ReservationController::class, 'reject'])
+    ->name('reservation.reject');  
+
 
 //no se que hace esta ruta pero bueno no la toco mejor por si acaso
 Route::get('/user-register', function () {
