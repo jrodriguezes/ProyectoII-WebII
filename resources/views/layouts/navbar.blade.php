@@ -1,5 +1,7 @@
 @php
-    $imgUrl = $currentUser->profile_photo ?? 'https://www.gravatar.com/avatar/';
+    $imgUrl = ($currentUser && $currentUser->profile_photo)
+        ? asset('storage/' . $currentUser->profile_photo)   // <-- aquí se arma bien la URL
+        : null;
 @endphp
 
 <nav class="bg-white border-gray-200 dark:bg-gray-900">

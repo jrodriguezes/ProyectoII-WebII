@@ -19,7 +19,6 @@
             </div>
         </div>
 
-
         @if ($currentUser->user_type == 'passenger')
             <div class="w-full overflow-x-auto pr-0 -mr-4 sm:-mr-6 md:-mr-8 lg:-mr-10">
                 <table class="w-full table-fixed border-collapse divide-y-2 divide-gray-200 dark:divide-gray-700 text-center">
@@ -75,6 +74,7 @@
                     </tbody>
                 </table>
             </div>
+
         @elseif($currentUser->user_type == 'driver')
             <div class="w-full overflow-x-auto pr-0 -mr-4 sm:-mr-6 md:-mr-8 lg:-mr-10">
                 <div class="p-8">
@@ -116,25 +116,23 @@
                                         <td class="px-3 py-2 whitespace-nowrap">
                                             {{ $reservation->created_at }}
                                         </td>
-
-                                        <td class="px-3 py-2 whitespace-nowrap">
+                                    @if ($reservation->status == 'pending')
+                                        <td class="px-3 py-2 whitespace-nowrap flex justify-center">
                                             <form action=" {{ route('reservation.accept') }}" method="POST">
                                                 @csrf
                                                 <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
-                                                <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">
-                                                    accept
+                                                <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded">
+                                                    Accept
                                                 </button>
                                             </form>
-
 
                                             <form action=" {{ route('reservation.reject') }}" method="POST">
                                                 @csrf
                                                 <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
-                                                <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">
-                                                    reject
+                                                <button class="bg-orange-600 hover:bg-orange-700 text-white px-3 py-2 rounded">
+                                                    Reject
                                                 </button>
                                             </form>
-
 
                                             <form action=" {{ route('reservation.cancel') }}" method="POST">
                                                 @csrf
@@ -144,6 +142,7 @@
                                                 </button>
                                             </form>
                                         </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>
