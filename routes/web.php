@@ -8,7 +8,7 @@ use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
-use App\Models\Reservation;
+use App\Http\Controllers\MagicLoginController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -42,6 +42,15 @@ Route::post('/login', [LoginController::class, 'authenticate'])->name('login.aut
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/verify-email', [UserController::class, 'verify'])->name('verify.email');
+
+// formulario de enviar link de login
+Route::post('/login/magic-link', [MagicLoginController::class, 'sendLink'])->name('login.magic.send')->middleware('guest');
+
+// el enlace que viene en el correo
+Route::get('/login/magic-link/{token}', [MagicLoginController::class, 'loginWithLink'])->name('magic.login')->middleware('guest');
+
+Route::get('/login-magic-link', function () {
+    return view('login-magic');})->name('login-magic-link');
 
 // Vehiculo
 Route::middleware('auth')->group(function () {
