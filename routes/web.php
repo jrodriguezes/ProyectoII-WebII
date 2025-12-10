@@ -4,6 +4,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\EditProfileController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RideController;
+use App\Http\Controllers\SearchLogController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
@@ -26,6 +27,16 @@ Route::get('/email-verified', function () {
 });
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+//buscar rides
+Route::post('/home/ride', [HomeController::class, 'searchRides'])->name('search.ride');
+
+//report admin
+Route::post('/home/report', [SearchLogController::class, 'report'])->name('report.admin');
+
+Route::get('/edit-profile', function () {
+    return view('edit-profile');
+});
 
 Route::get('/check-email', function () {
     return view('check-your-email');
@@ -51,6 +62,14 @@ Route::get('/login/magic-link/{token}', [MagicLoginController::class, 'loginWith
 
 Route::get('/login-magic-link', function () {
     return view('login-magic');})->name('login-magic-link');
+
+
+Route::post('/home', [UserController::class, 'activateUser'])
+    ->name('user.activate'); 
+
+Route::post('/home', [UserController::class, 'desactivateUser'])
+    ->name('user.desactivate'); 
+
 
 // Vehiculo
 Route::middleware('auth')->group(function () {

@@ -6,6 +6,9 @@ use App\Models\Vehicle;
 use App\Models\Ride;
 use App\Models\Reservation;
 use App\Models\User;
+use App\Models\SearchLog;
+
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -41,7 +44,9 @@ class HomeController extends Controller
 
         //dd($reservationList);
 
-        $userList = User::where('id')->get();
+        $userList = User::all();
+
+        //dd($userList);
 
         $reservedRideIds = Reservation::where('passenger_id', $currentUser->id)
             ->pluck('ride_id')
@@ -49,6 +54,59 @@ class HomeController extends Controller
 
         return view('home', compact('currentUser', 'vehiclesList', 'ridesList', 'reservationList', 'userList', 'allRidesList', 'reservedRideIds'));
     }
+
+    public function searchRides(Request $request){
+        $currentUser = auth()->user();
+        
+        $allRidesList = Ride::where('origin', $request->origin)
+                    ->where('destination', $request->destination)
+                    ->with(['vehicle', 'driver'])
+                    ->get();
+
+        SearchLog::create([
+            'user_id' => auth()->id(),
+            'from_location' => $request->origin,
+            'to_location' => $request->destination,
+            'searched_at' => now()
+        ]);
+
+        if (!$currentUser) {
+            return view('home', [
+                'currentUser' => null,
+                'vehiclesList' => collect(),
+                'vehicles' => collect(),
+                'ridesList' => collect(),
+                'reservationList' => collect(),
+                'reservedRideIds' => [],
+                'userList' => collect(),
+                'allRidesList' => $allRidesList,
+            ]);
+        }
+
+        $vehiclesList = Vehicle::where('driver_id', $currentUser->id)->get();
+
+        $ridesList = Ride::where('driver_id', $currentUser->id)->get();
+
+        //dd($ridesList);
+
+        $reservationList = Reservation::all();
+
+        //dd($reservationList);
+
+        $userList = User::all();
+
+        //dd($userList);
+
+        $reservedRideIds = Reservation::where('passenger_id', $currentUser->id)
+            ->pluck('ride_id')
+            ->toArray();
+
+        return view('home', compact('currentUser', 'vehiclesList', 'ridesList', 'reservationList', 'userList', 'allRidesList', 'reservedRideIds'));
+
+ 
+    }
+
+     
 }
 
 ?>

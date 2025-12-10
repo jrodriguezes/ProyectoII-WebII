@@ -35,6 +35,13 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
+                        @if ($reservationsAsPassenger->isEmpty())
+                            <tr>
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                <td class="px-3 py-2 whitespace-nowrap">No bookings have been registered yet.</td>
+                                </td>
+                            </tr>
+                        @endif
                         @foreach ($reservationsAsPassenger as $reservation)
                             <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
                                 <td class="px-3 py-2 whitespace-nowrap">
@@ -93,6 +100,13 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
+                                @if ($reservationsAsDriver->isEmpty())
+                                    <tr>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                        <td class="px-3 py-2 whitespace-nowrap">No bookings have been registered yet.</td>
+                                        </td>
+                                    </tr>
+                                @endif
                                 @foreach ($reservationsAsDriver as $reservation)
                                     <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
                                         <td class="px-3 py-2 whitespace-nowrap">
@@ -116,32 +130,32 @@
                                         <td class="px-3 py-2 whitespace-nowrap">
                                             {{ $reservation->created_at }}
                                         </td>
-                                    @if ($reservation->status == 'pending')
-                                        <td class="px-3 py-2 whitespace-nowrap flex justify-center">
-                                            <form action=" {{ route('reservation.accept') }}" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
-                                                <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded">
-                                                    Accept
-                                                </button>
-                                            </form>
+                                        @if ($reservation->status == 'pending')
+                                            <td class="px-3 py-2 whitespace-nowrap flex justify-center">
+                                                <form action=" {{ route('reservation.accept') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
+                                                    <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded">
+                                                        Accept
+                                                    </button>
+                                                </form>
 
-                                            <form action=" {{ route('reservation.reject') }}" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
-                                                <button class="bg-orange-600 hover:bg-orange-700 text-white px-3 py-2 rounded">
-                                                    Reject
-                                                </button>
-                                            </form>
+                                                <form action=" {{ route('reservation.reject') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
+                                                    <button class="bg-orange-600 hover:bg-orange-700 text-white px-3 py-2 rounded">
+                                                        Reject
+                                                    </button>
+                                                </form>
 
-                                            <form action=" {{ route('reservation.cancel') }}" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
-                                                <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">
-                                                    Cancel
-                                                </button>
-                                            </form>
-                                        </td>
+                                                <form action=" {{ route('reservation.cancel') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
+                                                    <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">
+                                                        Cancel
+                                                    </button>
+                                                </form>
+                                            </td>
                                         @endif
                                     </tr>
                                 @endforeach
