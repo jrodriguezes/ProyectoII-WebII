@@ -97,9 +97,9 @@
                                             </label>
                                             <select id="departure" name="origin"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                                                                                focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
-                                                                                dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
-                                                                                dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                                                            focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
+                                                                                            dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
+                                                                                            dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                 <option selected>Select place of arrival</option>
                                                 <option value="ciudadquesada">Ciudad Quesada</option>
                                                 <option value="florencia">Florencia</option>
@@ -123,9 +123,9 @@
                                             </label>
                                             <select id="arrival" name="destination"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                                                                                focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
-                                                                                dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
-                                                                                dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                                                            focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
+                                                                                            dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
+                                                                                            dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                 <option selected>Select place of departure</option>
                                                 <option value="ciudadquesada">Ciudad Quesada</option>
                                                 <option value="florencia">Florencia</option>
@@ -659,10 +659,10 @@
                                                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color</label>
                                                                     <select id="color" name="color"
                                                                         class=" bg-gray-50 border border-gray-300 text-gray-900
-                                                                                                                                                                            text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500
-                                                                                                                                                                            block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500
-                                                                                                                                                                            dark:placeholder-gray-400 dark:text-white
-                                                                                                                                                                            dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                                                                                                                                                                text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500
+                                                                                                                                                                                                block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500
+                                                                                                                                                                                                dark:placeholder-gray-400 dark:text-white
+                                                                                                                                                                                                dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                                         <option value="{{ $vehicle->color }}"
                                                                             selected="{{ $vehicle->color }}">Selected
                                                                             color:{{ $vehicle->color }}
@@ -710,7 +710,7 @@
                                                                 <div class="col-span-2">
                                                                     <h2
                                                                         class=" block mb-2 text-sm font-medium text-gray-900
-                                                                                                                                                            dark:text-white">
+                                                                                                                                                                                dark:text-white">
                                                                         Vehicle
                                                                         picture
                                                                         </h-2>
@@ -1210,8 +1210,8 @@
                                             <form action="/post/proxy.php" method="POST">
                                                 <input type="hidden" name="user_id"
                                                     value="{{$user->id}}"">
-                                                                                                                                    <button class=" rounded-lg
-                                                    bg-yellow-500 px-4 py-2 text-white">
+                                                                                                                                                        <button class="
+                                                    rounded-lg bg-yellow-500 px-4 py-2 text-white">
                                                 Activar
                                                 </button>
                                             </form>
@@ -1371,10 +1371,10 @@
                                                 <p>There's not more available seats</p>
 
                                             @else
-                                                <button data-modal-target="{{ $modalId }}" data-modal-toggle="{{ $modalId }}"
+                                                <a href="login"
                                                     class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700">
                                                     Book ride
-                                                </button>
+                                                </a>
                                             @endif
                                         </td>
                                     </tr>
@@ -1387,10 +1387,10 @@
                                                 <button data-modal-toggle="{{ $modalId }}" class="p-2">✕</button>
                                             </div>
 
-                                            <form action="/post/proxy.php" method="POST">
+                                            <form action="{{ route('login') }}" method="POST">
                                                 <input type="hidden" value="{{ $ride->id }}" name="ride_id">
                                                 <input type="hidden" value="book_ride" name="action">
-                                                <input type="hidden" name="user_id" value="{{ $currentUser->id }}">
+
                                                 <p class="mb-4">Are you sure you want to afiliate with this ride?</p>
                                                 <button class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded">Confirm
                                                     ride</button>
