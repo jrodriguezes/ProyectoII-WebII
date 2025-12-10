@@ -7,7 +7,6 @@ use App\Models\Vehicle;
 
 class VehicleController extends Controller
 {
-   //crear
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -30,7 +29,6 @@ class VehicleController extends Controller
             $photoPath = $request->file('vehicle_picture')->store('vehicle_photos', 'public');
         }
 
-
         Vehicle::create([
             'plate_id' => $data['plate_id'],
             'driver_id' => auth()->id(),
@@ -43,14 +41,11 @@ class VehicleController extends Controller
             'vehicle_picture' => $photoPath,
         ]);
 
-
         return redirect()->back()->with('success', 'Vehículo registrado correctamente.');
     }
 
-    //modificar
     public function update(Request $request)
     {
-
         //dd($request->all());
 
         $data = $request->validate([
@@ -89,7 +84,6 @@ class VehicleController extends Controller
         return redirect()->back()->with('success', 'Vehículo actualizado correctamente.');
     }
 
-    //eliminar
     public function destroy(Request $request)
     {
         //dd($request->all());    

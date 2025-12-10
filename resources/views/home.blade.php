@@ -25,23 +25,432 @@
             </div>
         </div>
         @auth
-                @if (in_array($currentUser->user_type, ['driver', 'driver&passenger']))
-                    <div class="max-h-[46rem] overflow-x-auto p-8">
-                        <div class="flex items-center">
-                            <div class="p-8 pl-0 pt-0 pb-0">
-                                <h2 class="text-xl font-semibold">Your rides</h2>
-                            </div>
-                            <!-- Modal toggle -->
-                            <div class="">
-                                <button data-modal-target="ride-modal" data-modal-toggle="ride-modal"
-                                    class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700"
-                                    type="button">
-                                    Create ride
-                                </button>
+            @if (in_array($currentUser->user_type, ['driver', 'driver&passenger']))
+                <div class="max-h-[46rem] overflow-x-auto p-8">
+                    <div class="flex items-center">
+                        <div class="p-8 pl-0 pt-0 pb-0">
+                            <h2 class="text-xl font-semibold">Your rides</h2>
+                        </div>
+                        <!-- Modal toggle -->
+                        <div class="">
+                            <button data-modal-target="ride-modal" data-modal-toggle="ride-modal"
+                                class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700"
+                                type="button">
+                                Create ride
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Main modal -->
+                    <div id="ride-modal" tabindex="-1" aria-hidden="true"
+                        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <div class="relative p-4 w-full max-w-md max-h-full">
+                            <!-- Modal content -->
+                            <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                                <!-- Modal header -->
+                                <div
+                                    class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                        Create new ride
+                                    </h3>
+                                    <button type="button"
+                                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                        data-modal-toggle="ride-modal">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                </div>
+                                <!-- Modal body -->
+                                <form class="p-4 md:p-5" action="{{ route('ride.register') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="action" value="register_ride">
+                                    <div class="grid gap-4 mb-4 grid-cols-2">
+                                        <div class="col-span-2">
+                                            <label for="name"
+                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                                            <input type="text" name="name" id="name"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                placeholder="Type ride name or some description" required="">
+                                        </div>
+
+                                        <div class="col-span-2">
+                                            <label for="vehicle_id"
+                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vehicle</label>
+                                            <select id="vehicle_id" name="vehicle_id"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                <option selected>Select your vehicle</option>
+                                                @foreach ($vehiclesList as $vehicle)
+                                                    <option value="{{ $vehicle->plate_id }}">
+                                                        {{ $vehicle->brand }}, {{ $vehicle->model }}, {{ $vehicle->plate_id }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <label for="departure"
+                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                Place arrival (San Carlos)
+                                            </label>
+                                            <select id="departure" name="origin"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                                                                                focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
+                                                                                dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
+                                                                                dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                <option selected>Select place of arrival</option>
+                                                <option value="ciudadquesada">Ciudad Quesada</option>
+                                                <option value="florencia">Florencia</option>
+                                                <option value="quesada">Quesada Centro</option>
+                                                <option value="pital">Pital</option>
+                                                <option value="cutris">Cutris</option>
+                                                <option value="venecia">Venecia</option>
+                                                <option value="aguasarcas">Aguas Zarcas</option>
+                                                <option value="pocosol">Pocosol</option>
+                                                <option value="la_fortuna">La Fortuna</option>
+                                                <option value="palmera">Palmera</option>
+                                                <option value="venado">Venado</option>
+                                                <option value="monterrey">Monterrey</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <label for="arrival"
+                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                Place departure (San Carlos)
+                                            </label>
+                                            <select id="arrival" name="destination"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                                                                                focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
+                                                                                dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
+                                                                                dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                <option selected>Select place of departure</option>
+                                                <option value="ciudadquesada">Ciudad Quesada</option>
+                                                <option value="florencia">Florencia</option>
+                                                <option value="quesada">Quesada Centro</option>
+                                                <option value="pital">Pital</option>
+                                                <option value="cutris">Cutris</option>
+                                                <option value="venecia">Venecia</option>
+                                                <option value="aguasarcas">Aguas Zarcas</option>
+                                                <option value="pocosol">Pocosol</option>
+                                                <option value="la_fortuna">La Fortuna</option>
+                                                <option value="palmera">Palmera</option>
+                                                <option value="venado">Venado</option>
+                                                <option value="monterrey">Monterrey</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-span-2">
+                                            <label for="departure_time"
+                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Departure
+                                                time</label>
+                                            <input type="datetime-local" name="departure_date" id="departure_date"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                required="">
+                                        </div>
+
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <label for="price_seats"
+                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price per
+                                                seat</label>
+                                            <input type="number" name="seats_offered" id="price_seats"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                placeholder="$10" required="">
+                                        </div>
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <label for="seats"
+                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seats
+                                            </label>
+                                            <input type="number" name="price_per_seat" id="seats"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                placeholder="5" required="">
+                                        </div>
+                                    </div>
+                                    <button type="submit"
+                                        class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        Add new ride
+                                    </button>
+                                </form>
                             </div>
                         </div>
+                    </div>
+                    <table class="min-w-full divide-y-2 divide-gray-200 dark:divide-gray-700 dt-debug">
+                        <thead class="sticky top-0 bg-white ltr:text-left rtl:text-right dark:bg-gray-900">
+                            <tr class="*:font-medium *:text-gray-900 dark:*:text-white">
+                                <th class="px-3 py-2 whitespace-nowrap">Id</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Vehicle</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Name</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Departure place</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Arrive place</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Date</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Price per seat</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Seats</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Modify</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Delete</th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
+                            @if (empty($ridesList))
+                                <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white ">
+                                    <td class="px-3 py-2 whitespace-nowrap">No rides have been registered yet.</td>
+                                </tr>
+                            @else
+                                @foreach ($ridesList as $ride)
+                                    @php
+                                        $uid = $ride->id;
+                                        $mid = "ride-modify-modal-$uid";
+                                        $did = "ride-delete-modal-$uid";
+                                    @endphp
+                                    <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $ride->id }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $ride->vehicle_plate }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $ride->name }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $ride->origin }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $ride->destination }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $ride->departure_date->format('Y-m-d H:i') }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ '$' . number_format($ride->price_per_seat, 2) }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $ride->seats_offered }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            <button data-modal-target="{{ $mid }}" data-modal-toggle="{{ $mid }}"
+                                                class="rounded-lg bg-yellow-500 px-4 py-2 text-white">
+                                                Modify
+                                            </button>
+                                            <!-- Modal MODIFICAR -->
+                                            <div id="{{ $mid }}" aria-hidden="true"
+                                                class="hidden fixed inset-0 z-50 flex items-center justify-center">
+                                                <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
+                                                    <div class="flex items-center justify-between border-b pb-2 mb-4">
+                                                        <h3 class="text-lg font-semibold">Modify ride #{{ $uid }}</h3>
+                                                        <button type="button"
+                                                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                            data-modal-toggle="{{ $mid }}">
+                                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                                fill="none" viewBox="0 0 14 14">
+                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                            </svg>
+                                                            <span class="sr-only">Close modal</span>
+                                                        </button>
+                                                    </div>
+                                                    <form class="p-4 md:p-5" action="{{ route('ride.edit') }}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="action" value="modify_ride">
+                                                        <input type="hidden" name="ride_id" value="{{ $ride->id }}">
+
+                                                        <div class="grid gap-4 mb-4 grid-cols-2">
+                                                            <!-- Name -->
+                                                            <div class="col-span-2">
+                                                                <label for="name"
+                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                                                                <input type="text" name="name" id="name" value="{{ $ride->name }}"
+                                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                                    placeholder="Type ride name or some description" required>
+                                                            </div>
+
+                                                            <!-- Vehicle -->
+                                                            <div class="col-span-2">
+                                                                <label for="vehicle_id"
+                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vehicle</label>
+                                                                <select id="vehicle_id" name="vehicle_id"
+                                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                                    required>
+                                                                    <option value="" disabled>Select your vehicle</option>
+
+                                                                    @foreach ($vehiclesList as $vehicle)
+                                                                            @php
+                                                                                $plate = $vehicle->plate_id;
+                                                                                $label = $vehicle->brand . ' ' . $vehicle->model . ' (' . $vehicle->plate_id . ')';
+                                                                                $selected = $vehicle->plate_id === $ride->vehicle_plate ? 'selected' : '';
+                                                                            @endphp
+                                                                            <option value="{{ $plate }}" {{ $selected }}>{{ $label }}</option>
+                                                                        </select>
+                                                                    @endforeach
+                                                            </div>
+                                                            <!-- Origin (departure) -->
+                                                            <div class="col-span-2 sm:col-span-1">
+                                                                <label for="origin"
+                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                                    Place departure (San Carlos)
+                                                                </label>
+                                                                <select id="origin" name="origin"
+                                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                                    required>
+                                                                    <option value="" disabled>Select place of departure</option>
+                                                                    @php
+                                                                        $places = [
+                                                                            'ciudadquesada',
+                                                                            'florencia',
+                                                                            'quesada',
+                                                                            'pital',
+                                                                            'cutris',
+                                                                            'venecia',
+                                                                            'aguasarcas',
+                                                                            'pocosol',
+                                                                            'la_fortuna',
+                                                                            'palmera',
+                                                                            'venado',
+                                                                            'monterrey'
+                                                                        ];
+                                                                    @endphp
+
+                                                                    @foreach ($places as $p)
+                                                                        <option value="{{ $p }}" {{ isset($ride) && $ride->origin === $p ? 'selected' : '' }}>
+                                                                            {{ ucwords(str_replace('_', ' ', $p)) }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <!-- Destination (arrival) -->
+                                                            <div class="col-span-2 sm:col-span-1">
+                                                                <label for="destination"
+                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                                    Place arrival (San Carlos)
+                                                                </label>
+                                                                <select id="destination" name="destination"
+                                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                                    required>
+
+                                                                    <option value="" disabled>Select place of arrival</option>
+
+                                                                    @foreach ($places as $p)
+                                                                        <option value="{{ $p }}" {{ isset($ride) && $ride->destination === $p ? 'selected' : '' }}>
+                                                                            {{ ucwords(str_replace('_', ' ', $p)) }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <!-- Departure time -->
+                                                            <div class="col-span-2">
+                                                                <label for="departure_time"
+                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                                    Departure time
+                                                                </label>
+                                                                @php
+                                                                    $datetimeValue = '';
+                                                                @endphp
+                                                                @if (!empty($ride->departure_date))
+                                                                    @php
+                                                                        $datetimeValue = date('Y-m-d\TH:i', strtotime($ride->departure_date));
+                                                                    @endphp
+                                                                @endif
+
+                                                                <input type="datetime-local" name="departure_date" id="departure_date"
+                                                                    value="{{ $datetimeValue }}"
+                                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                                    required>
+                                                            </div>
+
+                                                            <!-- Price per seat -->
+                                                            <div class="col-span-2 sm:col-span-1">
+                                                                <label for="price_per_seat"
+                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                                    Price per seat
+                                                                </label>
+                                                                <input type="number" step="0.01" name="price_per_seat" id="price_per_seat"
+                                                                    value="{{ $ride->price_per_seat }}"
+                                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                                    placeholder="10.00" required>
+                                                            </div>
+
+                                                            <!-- Seats offered -->
+                                                            <div class="col-span-2 sm:col-span-1">
+                                                                <label for="seats_offered"
+                                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                                    Seats
+                                                                </label>
+                                                                <input type="number" name="seats_offered" id="seats_offered"
+                                                                    value="{{ $ride->seats_offered }}"
+                                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                                    placeholder="5" required>
+                                                            </div>
+                                                        </div>
+                                                        <button type="submit"
+                                                            class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                            <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                                                    clip-rule="evenodd"></path>
+                                                            </svg>
+                                                            Save changes
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            <!-- Botón ELIMINAR -->
+                                            <button data-modal-target="{{ $did }}" data-modal-toggle="{{ $did }}"
+                                                class="rounded-lg bg-red-600 px-4 py-2 text-white">
+                                                Delete
+                                            </button>
+                                            <!-- Modal ELIMINAR -->
+                                            <div id="{{ $did }}" aria-hidden="true"
+                                                class="hidden fixed inset-0 z-50 flex items-center justify-center">
+                                                <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
+                                                    <div class="flex items-center justify-between border-b pb-2 mb-4">
+                                                        <h3 class="text-lg font-semibold">Delete ride #{{ $uid }}</h3>
+                                                        <button data-modal-toggle="{{ $did }}" class="p-2">✕</button>
+                                                    </div>
+
+                                                    <form action="{{ route('ride.delete') }}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="action" value="delete_ride">
+                                                        <input type="hidden" name="ride_id" value="{{$uid}}">
+                                                        <p class="mb-4">Are you sure you want to delete this ride?</p>
+                                                        <button class="bg-red-600 text-white px-4 py-2 rounded">Confirm delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+                <div class="max-h-[46rem] overflow-x-auto p-8">
+                    <div class="flex items-center">
+                        <div class="p-8 pl-0 pb-0 pt-0">
+                            <h2 class="text-lg font-semibold">Your vehicles</h2>
+                        </div>
+                        <div>
+                            <!-- Modal toggle -->
+                            <button data-modal-target="vehicle-modal" data-modal-toggle="vehicle-modal"
+                                class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700"
+                                type="button">
+                                Add new vehicle
+                            </button>
+                        </div>
                         <!-- Main modal -->
-                        <div id="ride-modal" tabindex="-1" aria-hidden="true"
+                        <div id="vehicle-modal" tabindex="-1" aria-hidden="true"
                             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                             <div class="relative p-4 w-full max-w-md max-h-full">
                                 <!-- Modal content -->
@@ -50,11 +459,11 @@
                                     <div
                                         class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
                                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            Create new ride
+                                            Add new vehicle
                                         </h3>
                                         <button type="button"
                                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                            data-modal-toggle="ride-modal">
+                                            data-modal-toggle="vehicle-modal">
                                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                                 viewBox="0 0 14 14">
                                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -64,108 +473,72 @@
                                         </button>
                                     </div>
                                     <!-- Modal body -->
-                                    <form class="p-4 md:p-5" action="{{ route('ride.register') }}" method="POST">
+                                    <form class="p-4 md:p-5" action="{{ route('vehicle.register') }}" method="POST"
+                                        enctype="multipart/form-data">
                                         @csrf
-                                        <input type="hidden" name="action" value="register_ride">
-                                        <div class="grid gap-4 mb-4 grid-cols-2">
+                                        <input type="hidden" name="action" value="register_vehicle">
+                                        <div class="grid gap-4 mb-4 grid-cols-2 text-center">
                                             <div class="col-span-2">
-                                                <label for="name"
-                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                                                <input type="text" name="name" id="name"
+                                                <label for="plate_id"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Plate
+                                                    Id</label>
+                                                <input type="text" name="plate_id" id="plate_id"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                    placeholder="Type ride name or some description" required="">
+                                                    placeholder="Type plate Id. Example: (ABC-123)" required="">
                                             </div>
-
-                                            <div class="col-span-2">
-                                                <label for="vehicle_id"
-                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vehicle</label>
-                                                <select id="vehicle_id" name="vehicle_id"
-                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg">
-                                                    <option selected>Select your vehicle</option>
-                                                    @foreach ($vehiclesList as $vehicle)
-                                                        <option value="{{ $vehicle->plate_id }}">
-                                                            {{ $vehicle->brand }}, {{ $vehicle->model }}, {{ $vehicle->plate_id }}
-                                                        </option>
-                                                    @endforeach
+                                            <div class="col-span-2 sm:col-span-1">
+                                                <label for="color"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color</label>
+                                                <select id="color" name="color"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    <option selected="">Select color</option>
+                                                    <option value="Blue">Blue</option>
+                                                    <option value="Yellow">Yellow</option>
+                                                    <option value="Green">Green</option>
+                                                    <option value="White">White</option>
+                                                    <option value="Cyan">Cyan</option>
+                                                    <option value="Gray">Gray</option>
+                                                    <option value="Red">Red</option>
                                                 </select>
                                             </div>
-
                                             <div class="col-span-2 sm:col-span-1">
-                                                <label for="departure"
-                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                    Place arrival (San Carlos)
+                                                <label for="brand"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Brand</label>
+                                                <input type="text" name="brand" id="brand"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                    placeholder="Toyota" required="">
+                                            </div>
+                                            <div class="col-span-2">
+                                                <label for="model"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Model
                                                 </label>
-                                                <select id="departure" name="origin"
-                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
-                                                                                                                                                                                                                                                                                                                                                                                            dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
-                                                                                                                                                                                                                                                                                                                                                                                            dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <option selected>Select place of arrival</option>
-                                                    <option value="ciudadquesada">Ciudad Quesada</option>
-                                                    <option value="florencia">Florencia</option>
-                                                    <option value="quesada">Quesada Centro</option>
-                                                    <option value="pital">Pital</option>
-                                                    <option value="cutris">Cutris</option>
-                                                    <option value="venecia">Venecia</option>
-                                                    <option value="aguasarcas">Aguas Zarcas</option>
-                                                    <option value="pocosol">Pocosol</option>
-                                                    <option value="la_fortuna">La Fortuna</option>
-                                                    <option value="palmera">Palmera</option>
-                                                    <option value="venado">Venado</option>
-                                                    <option value="monterrey">Monterrey</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-span-2 sm:col-span-1">
-                                                <label for="arrival"
-                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                    Place departure (San Carlos)
-                                                </label>
-                                                <select id="arrival" name="destination"
-                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
-                                                                                                                                                                                                                                                                                                                                                                                            dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
-                                                                                                                                                                                                                                                                                                                                                                                            dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <option selected>Select place of departure</option>
-                                                    <option value="ciudadquesada">Ciudad Quesada</option>
-                                                    <option value="florencia">Florencia</option>
-                                                    <option value="quesada">Quesada Centro</option>
-                                                    <option value="pital">Pital</option>
-                                                    <option value="cutris">Cutris</option>
-                                                    <option value="venecia">Venecia</option>
-                                                    <option value="aguasarcas">Aguas Zarcas</option>
-                                                    <option value="pocosol">Pocosol</option>
-                                                    <option value="la_fortuna">La Fortuna</option>
-                                                    <option value="palmera">Palmera</option>
-                                                    <option value="venado">Venado</option>
-                                                    <option value="monterrey">Monterrey</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-span-2">
-                                                <label for="departure_time"
-                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Departure
-                                                    time</label>
-                                                <input type="datetime-local" name="departure_date" id="departure_date"
+                                                <input type="text" name="model" id="model"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                    required="">
+                                                    placeholder="Type vehicle model" required="">
                                             </div>
-
                                             <div class="col-span-2 sm:col-span-1">
-                                                <label for="price_seats"
-                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price per
-                                                    seat</label>
-                                                <input type="number" name="seats_offered" id="price_seats"
+                                                <label for="year"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Year</label>
+                                                <input type="number" name="year" id="year"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                    placeholder="$10" required="">
+                                                    placeholder="2025" required="">
                                             </div>
                                             <div class="col-span-2 sm:col-span-1">
                                                 <label for="seats"
                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seats
-                                                </label>
-                                                <input type="number" name="price_per_seat" id="seats"
+                                                    capacity</label>
+                                                <input type="number" name="seats" id="seats"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                     placeholder="5" required="">
+                                            </div>
+                                            <div class="col-span-2">
+                                                <label for="vehicle-picture"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vehicle
+                                                    picture
+                                                </label>
+                                                <input type="file" name="vehicle_picture" id="vehicle-picture"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                    required="">
                                             </div>
                                         </div>
                                         <button type="submit"
@@ -176,211 +549,176 @@
                                                     d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
                                                     clip-rule="evenodd"></path>
                                             </svg>
-                                            Add new ride
+                                            Add new vehicle
                                         </button>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        <table class="min-w-full divide-y-2 divide-gray-200 dark:divide-gray-700 dt-debug">
-                            <thead class="sticky top-0 bg-white ltr:text-left rtl:text-right dark:bg-gray-900">
-                                <tr class="*:font-medium *:text-gray-900 dark:*:text-white">
-                                    <th class="px-3 py-2 whitespace-nowrap">Id</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Vehicle</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Name</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Departure place</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Arrive place</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Date</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Price per seat</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Seats</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Modify</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Delete</th>
+                    </div>
+
+                    <table class="min-w-full divide-y-2 divide-gray-200 dark:divide-gray-700">
+                        <thead class="sticky top-0 bg-white ltr:text-left rtl:text-right dark:bg-gray-900">
+                            <tr class="*:font-medium *:text-gray-900 dark:*:text-white text-center">
+                                <th class="px-3 py-2 whitespace-nowrap">Plate Id</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Color</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Brand</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Model</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Year</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Seats capacity</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Vehicle picture</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Modify</th>
+                                <th class="px-3 py-2 whitespace-nowrap">Delete</th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
+                            @if (empty($vehiclesList))
+                                <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white ">
+                                    <td class="px-3 py-2 whitespace-nowrap">No vehicles have been registered yet.</td>
                                 </tr>
-                            </thead>
+                            @else
+                                @foreach ($vehiclesList as $vehicle)
+                                    @php
+                                        $uid = $vehicle->plate_id;
+                                        $mid = "vehicle-modify-modal-$uid";
+                                        $did = "vehicle-delete-modal-$uid";
+                                        $fileId = "modify-vehicle-picture-$uid";
+                                        $imgUrl = asset('storage/' . $vehicle->vehicle_picture);
 
-                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
-                                @if (empty($ridesList))
-                                    <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white ">
-                                        <td class="px-3 py-2 whitespace-nowrap">No rides have been registered yet.</td>
-                                    </tr>
-                                @else
-                                    @foreach ($ridesList as $ride)
-                                        @php
-                                            $uid = $ride->id;
-                                            $mid = "ride-modify-modal-$uid";
-                                            $did = "ride-delete-modal-$uid";
-                                        @endphp
-                                        <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                {{ $ride->id }}
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                {{ $ride->vehicle_plate }}
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                {{ $ride->name }}
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                {{ $ride->origin }}
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                {{ $ride->destination }}
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                {{ $ride->departure_date->format('Y-m-d H:i') }}
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                {{ '$' . number_format($ride->price_per_seat, 2) }}
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                {{ $ride->seats_offered }}
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                <button data-modal-target="{{ $mid }}" data-modal-toggle="{{ $mid }}"
-                                                    class="rounded-lg bg-yellow-500 px-4 py-2 text-white">
-                                                    Modify
-                                                </button>
-                                                <!-- Modal MODIFICAR -->
-                                                <div id="{{ $mid }}" aria-hidden="true"
-                                                    class="hidden fixed inset-0 z-50 flex items-center justify-center">
-                                                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
-                                                        <div class="flex items-center justify-between border-b pb-2 mb-4">
-                                                            <h3 class="text-lg font-semibold">Modify ride #{{ $uid }}</h3>
-                                                            <button data-modal-toggle={{ $mid }}" class="p-2">✕</button>
+                                    @endphp
+                                    <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $vehicle->plate_id }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $vehicle->color }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $vehicle->brand }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $vehicle->model }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $vehicle['year'] }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            {{ $vehicle['seats'] }}
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            <img src="{{ $imgUrl }}" alt="Vehicle picture" class="h-8 w-24 object-cover rounded-lg mx-auto">
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            <button data-modal-target="{{ $mid }}" data-modal-toggle="{{ $mid }}"
+                                                class="inline-flex items-center rounded-lg bg-yellow-500 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 active:bg-yellow-600">
+                                                Modify
+                                            </button>
+                                            <div id="{{ $mid }}" tabindex="-1" aria-hidden="true"
+                                                class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                                <div class="relative p-4 w-full max-w-md max-h-full">
+                                                    <!-- Modal content modify -->
+                                                    <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                                                        <!-- Modal header -->
+                                                        <div
+                                                            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                                                Modify vehicle
+                                                            </h3>
+                                                            <button type="button"
+                                                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                                data-modal-toggle="{{ $mid }}">
+                                                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                                    fill="none" viewBox="0 0 14 14">
+                                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                                </svg>
+                                                                <span class="sr-only">Close modal</span>
+                                                            </button>
                                                         </div>
-
-                                                        <form class="p-4 md:p-5" action="{{ route('ride.edit') }}" method="POST">
+                                                        <!-- Modal body -->
+                                                        <form class="p-4 md:p-5" action="{{ route('vehicle.edit') }}" method="POST"
+                                                            enctype="multipart/form-data">
                                                             @csrf
-                                                            <input type="hidden" name="action" value="modify_ride">
-                                                            <input type="hidden" name="ride_id" value="{{ $ride->id }}">
-
+                                                            <input type="hidden" name="action" value="modify_vehicle">
                                                             <div class="grid gap-4 mb-4 grid-cols-2">
-                                                                <!-- Name -->
                                                                 <div class="col-span-2">
-                                                                    <label for="name"
-                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                                                                    <input type="text" name="name" id="name" value="{{ $ride->name }}"
+                                                                    <label for="plate_id"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Plate
+                                                                        Id</label>
+                                                                    <input type="text" value="{{ $vehicle->plate_id }}"
                                                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                                        placeholder="Type ride name or some description" required>
-                                                                </div>
+                                                                        placeholder="Type plate Id. Example: (ABC-123)" disabled>
 
-                                                                <!-- Vehicle -->
-                                                                <div class="col-span-2">
-                                                                    <label for="vehicle_id"
-                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vehicle</label>
-                                                                    <select id="vehicle_id" name="vehicle_id"
-                                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                                        required>
-                                                                        <option value="" disabled>Select your vehicle</option>
-
-                                                                        @foreach ($vehiclesList as $vehicle)
-                                                                                @php
-                                                                                    $plate = $vehicle->plate_id;
-                                                                                    $label = $vehicle->brand . ' ' . $vehicle->model . ' (' . $vehicle->plate_id . ')';
-                                                                                    $selected = $vehicle->plate_id === $ride->vehicle_plate ? 'selected' : '';
-                                                                                @endphp
-                                                                                <option value="{{ $plate }}" {{ $selected }}>{{ $label }}</option>
-                                                                            </select>
-                                                                        @endforeach
+                                                                    <input type="hidden" name="plate_id" id="plate_id"
+                                                                        value="{{ $vehicle->plate_id }}">
                                                                 </div>
-                                                                <!-- Origin (departure) -->
                                                                 <div class="col-span-2 sm:col-span-1">
-                                                                    <label for="origin"
-                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                                        Place departure (San Carlos)
-                                                                    </label>
-                                                                    <select id="origin" name="origin"
-                                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                                        required>
-                                                                        <option value="" disabled>Select place of departure</option>
-                                                                        @php
-                                                                            $places = [
-                                                                                'ciudadquesada',
-                                                                                'florencia',
-                                                                                'quesada',
-                                                                                'pital',
-                                                                                'cutris',
-                                                                                'venecia',
-                                                                                'aguasarcas',
-                                                                                'pocosol',
-                                                                                'la_fortuna',
-                                                                                'palmera',
-                                                                                'venado',
-                                                                                'monterrey'
-                                                                            ];
-                                                                        @endphp
-
-                                                                        @foreach ($places as $p)
-                                                                            <option value="{{ $p }}" {{ isset($ride) && $ride->origin === $p ? 'selected' : '' }}>
-                                                                                {{ ucwords(str_replace('_', ' ', $p)) }}
-                                                                            </option>
-                                                                        @endforeach
+                                                                    <label for="color"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color</label>
+                                                                    <select id="color" name="color"
+                                                                        class=" bg-gray-50 border border-gray-300 text-gray-900
+                                                                                                                                                                            text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500
+                                                                                                                                                                            block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500
+                                                                                                                                                                            dark:placeholder-gray-400 dark:text-white
+                                                                                                                                                                            dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                                        <option value="{{ $vehicle->color }}"
+                                                                            selected="{{ $vehicle->color }}">Selected
+                                                                            color:{{ $vehicle->color }}
+                                                                        </option>
+                                                                        <option value="Blue">Blue</option>
+                                                                        <option value="Yellow">Yellow</option>
+                                                                        <option value="Green">Green</option>
+                                                                        <option value="White">White</option>
+                                                                        <option value="Cyan">Cyan</option>
+                                                                        <option value="Gray">Gray</option>
+                                                                        <option value="Red">Red</option>
                                                                     </select>
                                                                 </div>
-
-                                                                <!-- Destination (arrival) -->
                                                                 <div class="col-span-2 sm:col-span-1">
-                                                                    <label for="destination"
-                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                                        Place arrival (San Carlos)
-                                                                    </label>
-                                                                    <select id="destination" name="destination"
-                                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                                        required>
-
-                                                                        <option value="" disabled>Select place of arrival</option>
-
-                                                                        @foreach ($places as $p)
-                                                                            <option value="{{ $p }}" {{ isset($ride) && $ride->destination === $p ? 'selected' : '' }}>
-                                                                                {{ ucwords(str_replace('_', ' ', $p)) }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
+                                                                    <label for="brand"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Brand</label>
+                                                                    <input type="text" name="brand" id="brand" value="{{ $vehicle->brand }}"
+                                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                                        placeholder="Toyota" required="">
                                                                 </div>
-
-                                                                <!-- Departure time -->
                                                                 <div class="col-span-2">
-                                                                    <label for="departure_time"
-                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                                        Departure time
+                                                                    <label for="model"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Model
                                                                     </label>
-                                                                    @php
-                                                                        $datetimeValue = '';
-                                                                    @endphp
-                                                                    @if (!empty($ride->departure_date))
-                                                                        @php
-                                                                            $datetimeValue = date('Y-m-d\TH:i', strtotime($ride->departure_date));
-                                                                        @endphp
-                                                                    @endif
-
-                                                                    <input type="datetime-local" name="departure_date" id="departure_date"
-                                                                        value="{{ $datetimeValue }}"
+                                                                    <input type="text" name="model" id="model" value="{{ $vehicle->model }}"
                                                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                                        required>
+                                                                        placeholder="Type vehicle model" required="">
                                                                 </div>
-
-                                                                <!-- Price per seat -->
                                                                 <div class="col-span-2 sm:col-span-1">
-                                                                    <label for="price_per_seat"
-                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                                        Price per seat
-                                                                    </label>
-                                                                    <input type="number" step="0.01" name="price_per_seat" id="price_per_seat"
-                                                                        value="{{ $ride->price_per_seat }}"
+                                                                    <label for="year"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Year</label>
+                                                                    <input type="number" name="year" id="year" value="{{ $vehicle->year }}"
                                                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                                        placeholder="10.00" required>
+                                                                        placeholder="2025" required="">
                                                                 </div>
-
-                                                                <!-- Seats offered -->
                                                                 <div class="col-span-2 sm:col-span-1">
-                                                                    <label for="seats_offered"
-                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                                        Seats
-                                                                    </label>
-                                                                    <input type="number" name="seats_offered" id="seats_offered"
-                                                                        value="{{ $ride->seats_offered }}"
+                                                                    <label for="seats"
+                                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seats
+                                                                        capacity</label>
+                                                                    <input type="number" name="seats" id="seats"
+                                                                        value="{{ $vehicle->seats }}"
                                                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                                        placeholder="5" required>
+                                                                        placeholder="5" required="">
+                                                                </div>
+                                                                <div class="col-span-2">
+                                                                    <h2
+                                                                        class=" block mb-2 text-sm font-medium text-gray-900
+                                                                                                                                                            dark:text-white">
+                                                                        Vehicle
+                                                                        picture
+                                                                        </h-2>
+                                                                        <img src="{{ $imgUrl }}" alt="Vehicle picture"
+                                                                            class="h-12 w-24 object-cover rounded-lg mx-auto">
+                                                                        <input type="file" name="modify_vehicle_picture" id="{{ $fileId }}"
+                                                                            accept="image/*"
+                                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                                 </div>
                                                             </div>
                                                             <button type="submit"
@@ -391,640 +729,274 @@
                                                                         d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
                                                                         clip-rule="evenodd"></path>
                                                                 </svg>
-                                                                Save changes
+                                                                Modify vehicle
                                                             </button>
                                                         </form>
                                                     </div>
                                                 </div>
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                <!-- Botón ELIMINAR -->
-                                                <button data-modal-target="{{ $did }}" data-modal-toggle="{{ $did }}"
-                                                    class="rounded-lg bg-red-600 px-4 py-2 text-white">
-                                                    Delete
-                                                </button>
-                                                <!-- Modal ELIMINAR -->
-                                                <div id="{{ $did }}" aria-hidden="true"
-                                                    class="hidden fixed inset-0 z-50 flex items-center justify-center">
-                                                    <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
-                                                        <div class="flex items-center justify-between border-b pb-2 mb-4">
-                                                            <h3 class="text-lg font-semibold">Delete ride #{{ $uid }}</h3>
-                                                            <button data-modal-toggle="{{ $did }}" class="p-2">✕</button>
+                                            </div>
+                                        </td>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                            <button data-modal-target="{{ $did }}" data-modal-toggle="{{ $did }}"
+                                                class="inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 active:bg-red-700">
+                                                Delete
+                                            </button>
+                                            <div id="{{ $did }}" tabindex="-1" aria-hidden="true"
+                                                class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                                <div class="relative p-4 w-full max-w-md max-h-full">
+                                                    <!-- Modal content datlete -->
+                                                    <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                                                        <!-- Modal header -->
+                                                        <div
+                                                            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                                                Delete vehicle
+                                                            </h3>
+                                                            <button type="button"
+                                                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                                data-modal-toggle="{{ $did }}">
+                                                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                                    fill="none" viewBox="0 0 14 14">
+                                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                                </svg>
+                                                                <span class="sr-only">Close modal</span>
+                                                            </button>
                                                         </div>
-
-                                                        <form action="{{ route('ride.delete') }}" method="POST">
+                                                        <!-- Modal body -->
+                                                        <form class="p-4 md:p-5" action="{{ route('vehicle.delete') }}" method="POST">
                                                             @csrf
-                                                            <input type="hidden" name="action" value="delete_ride">
-                                                            <input type="hidden" name="ride_id" value="{{$uid}}">
-                                                            <p class="mb-4">Are you sure you want to delete this ride?</p>
-                                                            <button class="bg-red-600 text-white px-4 py-2 rounded">Confirm delete</button>
+                                                            <input type="hidden" name="action" value="delete_vehicle">
+                                                            <div class="grid gap-4 mb-4 grid-cols-2 text-center">
+                                                                <div class="col-span-2">
+                                                                    <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                                        Are
+                                                                        you sure you want to delete this vehicle?
+                                                                    </p>
+                                                                    <input type="hidden" name="plate_id" id="plate_id"
+                                                                        value="{{ $vehicle->plate_id }}">
+                                                                </div>
+                                                            </div>
+                                                            <button type="submit"
+                                                                class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                                                <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                                                        clip-rule="evenodd"></path>
+                                                                </svg>
+                                                                Confirm delete
+                                                            </button>
                                                         </form>
                                                     </div>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="max-h-[46rem] overflow-x-auto p-8">
-                        <div class="flex items-center">
-                            <div class="p-8 pl-0 pb-0 pt-0">
-                                <h2 class="text-lg font-semibold">Your vehicles</h2>
-
-                            </div>
-                            <div>
-                                <!-- Modal toggle -->
-                                <button data-modal-target="vehicle-modal" data-modal-toggle="vehicle-modal"
-                                    class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700"
-                                    type="button">
-                                    Add new vehicle
-                                </button>
-                            </div>
-                            <!-- Main modal -->
-                            <div id="vehicle-modal" tabindex="-1" aria-hidden="true"
-                                class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                <div class="relative p-4 w-full max-w-md max-h-full">
-                                    <!-- Modal content -->
-                                    <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
-                                        <!-- Modal header -->
-                                        <div
-                                            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                                Add new vehicle
-                                            </h3>
-                                            <button type="button"
-                                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                data-modal-toggle="vehicle-modal">
-                                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                    viewBox="0 0 14 14">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                                </svg>
-                                                <span class="sr-only">Close modal</span>
-                                            </button>
-                                        </div>
-                                        <!-- Modal body -->
-                                        <form class="p-4 md:p-5" action="{{ route('vehicle.register') }}" method="POST"
-                                            enctype="multipart/form-data">
-                                            @csrf
-                                            <input type="hidden" name="action" value="register_vehicle">
-                                            <div class="grid gap-4 mb-4 grid-cols-2 text-center">
-                                                <div class="col-span-2">
-                                                    <label for="plate_id"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Plate
-                                                        Id</label>
-                                                    <input type="text" name="plate_id" id="plate_id"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="Type plate Id. Example: (ABC-123)" required="">
-                                                </div>
-                                                <div class="col-span-2 sm:col-span-1">
-                                                    <label for="color"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color</label>
-                                                    <select id="color" name="color"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                        <option selected="">Select color</option>
-                                                        <option value="Blue">Blue</option>
-                                                        <option value="Yellow">Yellow</option>
-                                                        <option value="Green">Green</option>
-                                                        <option value="White">White</option>
-                                                        <option value="Cyan">Cyan</option>
-                                                        <option value="Gray">Gray</option>
-                                                        <option value="Red">Red</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-span-2 sm:col-span-1">
-                                                    <label for="brand"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Brand</label>
-                                                    <input type="text" name="brand" id="brand"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="Toyota" required="">
-                                                </div>
-                                                <div class="col-span-2">
-                                                    <label for="model"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Model
-                                                    </label>
-                                                    <input type="text" name="model" id="model"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="Type vehicle model" required="">
-                                                </div>
-                                                <div class="col-span-2 sm:col-span-1">
-                                                    <label for="year"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Year</label>
-                                                    <input type="number" name="year" id="year"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="2025" required="">
-                                                </div>
-                                                <div class="col-span-2 sm:col-span-1">
-                                                    <label for="seats"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seats
-                                                        capacity</label>
-                                                    <input type="number" name="seats" id="seats"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="5" required="">
-                                                </div>
-                                                <div class="col-span-2">
-                                                    <label for="vehicle-picture"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vehicle
-                                                        picture
-                                                    </label>
-                                                    <input type="file" name="vehicle_picture" id="vehicle-picture"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        required="">
-                                                </div>
                                             </div>
-                                            <button type="submit"
-                                                class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                                <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd"
-                                                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                                        clip-rule="evenodd"></path>
-                                                </svg>
-                                                Add new vehicle
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
 
-                        <table class="min-w-full divide-y-2 divide-gray-200 dark:divide-gray-700">
-                            <thead class="sticky top-0 bg-white ltr:text-left rtl:text-right dark:bg-gray-900">
-                                <tr class="*:font-medium *:text-gray-900 dark:*:text-white text-center">
-                                    <th class="px-3 py-2 whitespace-nowrap">Plate Id</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Color</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Brand</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Model</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Year</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Seats capacity</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Vehicle picture</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Modify</th>
-                                    <th class="px-3 py-2 whitespace-nowrap">Delete</th>
+            @elseif (in_array($currentUser->user_type, ['passenger', 'driver&passenger']))
+                <div class="max-h-[46rem] overflow-x-auto p-8">
+                    <div class="flex items-center">
+                        <h2 class="text-base font-semibold text-gray-900 dark:text-gray-100 text-xl">Search rides</h2>
+                    </div>
+
+                    <div class="relative overflow-auto shadow-md sm:rounded-lg tw-dt-fix">
+                        <table id="filter-table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Select ride
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Model
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Year
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Brand
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Driver
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Available seats
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Price per seat
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Date
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Time
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Departure place
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Arrival place
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Actions
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
                                 </tr>
                             </thead>
 
-                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
-                                @if (empty($vehiclesList))
-                                    <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white ">
-                                        <td class="px-3 py-2 whitespace-nowrap">No vehicles have been registered yet.</td>
+                            <tbody class="align-middle">
+                                @foreach ($allRidesList as $ride)
+                                    @php
+                                        $modalId = 'confirm-ride-' . $ride->id;
+                                    @endphp
+
+                                    <tr class="text-center align-middle justify-center">
+
+                                        <td>{{ $ride->vehicle->plate_id }}</td>
+                                        <td>{{ $ride->vehicle->model }}</td>
+                                        <td>{{ $ride->vehicle->year }}</td>
+                                        <td>{{ $ride->vehicle->brand }}</td>
+                                        <td>{{ "{$ride->driver->first_name} {$ride->driver->last_name}" }}</td>
+                                        <td>{{ $ride->seats_offered }}</td>
+                                        <td>{{ $ride->price_per_seat }}</td>
+                                        <td>{{ $ride->departure_date->format('Y-m-d') }}</td>
+                                        <td>{{ $ride->departure_date->format('H:i') }}</td>
+                                        <td>{{ $ride->origin }}</td>
+                                        <td>{{ $ride->destination }}</td>
+
+                                        <td>
+                                            @if ($currentUser->id == $ride->driver_id)
+                                                <p>Your ride</p>
+
+                                            @elseif (in_array($ride->id, $reservedRideIds))
+                                                <p>You already booked this ride</p>
+
+                                            @elseif ($ride->seats_offered == 0)
+                                                <p>There's not more available seats</p>
+
+                                            @else
+                                                <button data-modal-target="{{ $modalId }}" data-modal-toggle="{{ $modalId }}"
+                                                    class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700">
+                                                    Book ride
+                                                </button>
+                                            @endif
+                                        </td>
                                     </tr>
-                                @else
-                                    @foreach ($vehiclesList as $vehicle)
-                                        @php
-                                            $uid = $vehicle->plate_id;
-                                            $mid = "vehicle-modify-modal-$uid";
-                                            $did = "vehicle-delete-modal-$uid";
-                                            $fileId = "modify-vehicle-picture-$uid";
-                                            $imgUrl = asset('storage/' . $vehicle->vehicle_picture);
 
-                                        @endphp
-                                        <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                {{ $vehicle->plate_id }}
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                {{ $vehicle->color }}
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                {{ $vehicle->brand }}
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                {{ $vehicle->model }}
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                {{ $vehicle['year'] }}
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                {{ $vehicle['seats'] }}
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                <img src="{{ $imgUrl }}" alt="Vehicle picture" class="h-8 w-24 object-cover rounded-lg mx-auto">
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                <button data-modal-target="{{ $mid }}" data-modal-toggle="{{ $mid }}"
-                                                    class="inline-flex items-center rounded-lg bg-yellow-500 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 active:bg-yellow-600">
-                                                    Modify
-                                                </button>
-                                                <div id="{{ $mid }}" tabindex="-1" aria-hidden="true"
-                                                    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                                    <div class="relative p-4 w-full max-w-md max-h-full">
-                                                        <!-- Modal content modify -->
-                                                        <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
-                                                            <!-- Modal header -->
-                                                            <div
-                                                                class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                                                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                                                    Modify vehicle
-                                                                </h3>
-                                                                <button type="button"
-                                                                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                                    data-modal-toggle="{{ $mid }}">
-                                                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                                        fill="none" viewBox="0 0 14 14">
-                                                                        <path stroke="currentColor" stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                                                    </svg>
-                                                                    <span class="sr-only">Close modal</span>
-                                                                </button>
-                                                            </div>
-                                                            <!-- Modal body -->
-                                                            <form class="p-4 md:p-5" action="{{ route('vehicle.edit') }}" method="POST"
-                                                                enctype="multipart/form-data">
-                                                                @csrf
-                                                                <input type="hidden" name="action" value="modify_vehicle">
-                                                                <div class="grid gap-4 mb-4 grid-cols-2">
-                                                                    <div class="col-span-2">
-                                                                        <label for="plate_id"
-                                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Plate
-                                                                            Id</label>
-                                                                        <input type="text" value="{{ $vehicle->plate_id }}"
-                                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                                            placeholder="Type plate Id. Example: (ABC-123)" disabled>
+                                    <div id="{{ $modalId }}" aria-hidden="true"
+                                        class="hidden fixed inset-0 z-50 flex items-center justify-center">
+                                        <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
+                                            <div class="flex items-center justify-between border-b pb-2 mb-4">
+                                                <h3 class="text-lg font-semibold">Confirm selected ride</h3>
+                                                <button data-modal-toggle="{{ $modalId }}" class="p-2">✕</button>
+                                            </div>
 
-                                                                        <input type="hidden" name="plate_id" id="plate_id"
-                                                                            value="{{ $vehicle->plate_id }}">
-                                                                    </div>
-                                                                    <div class="col-span-2 sm:col-span-1">
-                                                                        <label for="color"
-                                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color</label>
-                                                                        <select id="color" name="color"
-                                                                            class=" bg-gray-50 border border-gray-300 text-gray-900
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        dark:placeholder-gray-400 dark:text-white
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                                            <option value="{{ $vehicle->color }}"
-                                                                                selected="{{ $vehicle->color }}">Selected
-                                                                                color:{{ $vehicle->color }}
-                                                                            </option>
-                                                                            <option value="Blue">Blue</option>
-                                                                            <option value="Yellow">Yellow</option>
-                                                                            <option value="Green">Green</option>
-                                                                            <option value="White">White</option>
-                                                                            <option value="Cyan">Cyan</option>
-                                                                            <option value="Gray">Gray</option>
-                                                                            <option value="Red">Red</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="col-span-2 sm:col-span-1">
-                                                                        <label for="brand"
-                                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Brand</label>
-                                                                        <input type="text" name="brand" id="brand" value="{{ $vehicle->brand }}"
-                                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                                            placeholder="Toyota" required="">
-                                                                    </div>
-                                                                    <div class="col-span-2">
-                                                                        <label for="model"
-                                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Model
-                                                                        </label>
-                                                                        <input type="text" name="model" id="model" value="{{ $vehicle->model }}"
-                                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                                            placeholder="Type vehicle model" required="">
-                                                                    </div>
-                                                                    <div class="col-span-2 sm:col-span-1">
-                                                                        <label for="year"
-                                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Year</label>
-                                                                        <input type="number" name="year" id="year" value="{{ $vehicle->year }}"
-                                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                                            placeholder="2025" required="">
-                                                                    </div>
-                                                                    <div class="col-span-2 sm:col-span-1">
-                                                                        <label for="seats"
-                                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seats
-                                                                            capacity</label>
-                                                                        <input type="number" name="seats" id="seats"
-                                                                            value="{{ $vehicle->seats }}"
-                                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                                            placeholder="5" required="">
-                                                                    </div>
-                                                                    <div class="col-span-2">
-                                                                        <h2
-                                                                            class=" block mb-2 text-sm font-medium text-gray-900
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        dark:text-white">
-                                                                            Vehicle
-                                                                            picture
-                                                                            </h-2>
-                                                                            <img src="{{ $imgUrl }}" alt="Vehicle picture"
-                                                                                class="h-12 w-24 object-cover rounded-lg mx-auto">
-                                                                            <input type="file" name="modify_vehicle_picture" id="{{ $fileId }}"
-                                                                                accept="image/*"
-                                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                                    </div>
-                                                                </div>
-                                                                <button type="submit"
-                                                                    class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                                                    <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                                                        xmlns="http://www.w3.org/2000/svg">
-                                                                        <path fill-rule="evenodd"
-                                                                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                                                            clip-rule="evenodd"></path>
-                                                                    </svg>
-                                                                    Modify vehicle
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-3 py-2 whitespace-nowrap">
-                                                <button data-modal-target="{{ $did }}" data-modal-toggle="{{ $did }}"
-                                                    class="inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 active:bg-red-700">
-                                                    Delete
-                                                </button>
-                                                <div id="{{ $did }}" tabindex="-1" aria-hidden="true"
-                                                    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                                                    <div class="relative p-4 w-full max-w-md max-h-full">
-                                                        <!-- Modal content datlete -->
-                                                        <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
-                                                            <!-- Modal header -->
-                                                            <div
-                                                                class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                                                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                                                    Delete vehicle
-                                                                </h3>
-                                                                <button type="button"
-                                                                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                                                    data-modal-toggle="{{ $did }}">
-                                                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                                        fill="none" viewBox="0 0 14 14">
-                                                                        <path stroke="currentColor" stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                                                    </svg>
-                                                                    <span class="sr-only">Close modal</span>
-                                                                </button>
-                                                            </div>
-                                                            <!-- Modal body -->
-                                                            <form class="p-4 md:p-5" action="{{ route('vehicle.delete') }}" method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="action" value="delete_vehicle">
-                                                                <div class="grid gap-4 mb-4 grid-cols-2 text-center">
-                                                                    <div class="col-span-2">
-                                                                        <p class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                                            Are
-                                                                            you sure you want to delete this vehicle?
-                                                                        </p>
-                                                                        <input type="hidden" name="plate_id" id="plate_id"
-                                                                            value="{{ $vehicle->plate_id }}">
-                                                                    </div>
-                                                                </div>
-                                                                <button type="submit"
-                                                                    class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                                                    <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                                                        xmlns="http://www.w3.org/2000/svg">
-                                                                        <path fill-rule="evenodd"
-                                                                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                                                            clip-rule="evenodd"></path>
-                                                                    </svg>
-                                                                    Confirm delete
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
+                                            <form action="{{ route('reservation.register') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" value="{{ $ride->id }}" name="ride_id">
+                                                <input type="hidden" value="book_ride" name="action">
+                                                <input type="hidden" name="user_id" value="{{ $currentUser->id }}">
+                                                <p class="mb-4">Are you sure you want to afiliate with this ride?</p>
+                                                <button class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded">Confirm
+                                                    ride</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
-
-                @elseif (in_array($currentUser->user_type, ['passenger', 'driver&passenger']))
-                        <div class="max-h-[46rem] overflow-x-auto p-8">
-                            <div class="flex items-center">
-                                <h2 class="text-base font-semibold text-gray-900 dark:text-gray-100 text-xl">Search rides</h2>
-                            </div>
-                            <form action="{{ route('search.ride') }}" method="post" class="flex items-end gap-4 text-left px-4">
-                                @csrf
-
-                                <!-- ORIGIN -->
-                                <div class="w-1/4">
-                                    <label for="origin" class="block text-sm font-medium text-gray-300 mb-1">
-                                        Origin
-                                    </label>
-                                    <input type="text" name="origin" id="origin" required
-                                        class="w-full rounded-lg border-gray-300 bg-white px-3 py-2
-                                                                                                                                                                                                                                                                                                                                                                          focus:ring-indigo-500 focus:border-indigo-500
-                                                                                                                                                                                                                                                                                                                                                                          placeholder-[#000000] placeholder-opacity-100"
-                                        style="color:#000 !important;" placeholder="Origin">
-                                </div>
-
-                                <!-- DESTINATION -->
-                                <div class="w-1/4">
-                                    <label for="destination" class="block text-sm font-medium text-gray-300 mb-1">
-                                        Destination
-                                    </label>
-                                    <input type="text" name="destination" id="destination" required
-                                        class="w-full rounded-lg border-gray-300 bg-white px-3 py-2
-                                                                                                                                                                                                                                                                                                                                                                          focus:ring-indigo-500 focus:border-indigo-500
-                                                                                                                                                                                                                                                                                                                                                                          placeholder-[#000000] placeholder-opacity-100"
-                                        style="color:#000 !important;" placeholder="Destination">
-                                </div>
-
-                                <button type="submit"
-                                    class="h-[42px] bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 rounded-lg transition">
-                                    Search
-                                </button>
-                            </form>
-
-
-                        </div>
-
-                        <div class="relative overflow-auto shadow-md sm:rounded-lg tw-dt-fix">
-                            <table id="filter-table">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <span class="flex items-center">
-                                                Select ride
-                                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                                </svg>
-                                            </span>
-                                        </th>
-                                        <th>
-                                            <span class="flex items-center">
-                                                Model
-                                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                                </svg>
-                                            </span>
-                                        </th>
-                                        <th>
-                                            <span class="flex items-center">
-                                                Year
-                                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                                </svg>
-                                            </span>
-                                        </th>
-                                        <th>
-                                            <span class="flex items-center">
-                                                Brand
-                                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                                </svg>
-                                            </span>
-                                        </th>
-                                        <th>
-                                            <span class="flex items-center">
-                                                Driver
-                                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                                </svg>
-                                            </span>
-                                        </th>
-                                        <th>
-                                            <span class="flex items-center">
-                                                Available seats
-                                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                                </svg>
-                                            </span>
-                                        </th>
-                                        <th>
-                                            <span class="flex items-center">
-                                                Price per seat
-                                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                                </svg>
-                                            </span>
-                                        </th>
-                                        <th>
-                                            <span class="flex items-center">
-                                                Date
-                                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                                </svg>
-                                            </span>
-                                        </th>
-                                        <th>
-                                            <span class="flex items-center">
-                                                Time
-                                                <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                                </svg>
-                                            </span>
-                                        </th>
-                                        <th>
-                                            <span class="flex items-center">
-                                                Departure place
-                                                <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                                </svg>
-                                            </span>
-                                        </th>
-                                        <th>
-                                            <span class="flex items-center">
-                                                Arrival place
-                                                <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                                </svg>
-                                            </span>
-                                        </th>
-                                        <th>
-                                            <span class="flex items-center">
-                                                Actions
-                                                <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                                </svg>
-                                            </span>
-                                        </th>
-                                    </tr>
-                                </thead>
-
-                                <tbody class="align-middle">
-                                    @foreach ($allRidesList as $ride)
-                                        @php
-                                            $modalId = 'confirm-ride-' . $ride->id;
-                                        @endphp
-
-                                        <tr class="text-center align-middle justify-center">
-
-                                            <td>{{ $ride->vehicle->plate_id }}</td>
-                                            <td>{{ $ride->vehicle->model }}</td>
-                                            <td>{{ $ride->vehicle->year }}</td>
-                                            <td>{{ $ride->vehicle->brand }}</td>
-                                            <td>{{ "{$ride->driver->first_name} {$ride->driver->last_name}" }}</td>
-                                            <td>{{ $ride->seats_offered }}</td>
-                                            <td>{{ $ride->price_per_seat }}</td>
-                                            <td>{{ $ride->departure_date->format('Y-m-d') }}</td>
-                                            <td>{{ $ride->departure_date->format('H:i') }}</td>
-                                            <td>{{ $ride->origin }}</td>
-                                            <td>{{ $ride->destination }}</td>
-
-                                            <td>
-                                                @if ($currentUser->id == $ride->driver_id)
-                                                    <p>Your ride</p>
-
-                                                @elseif (in_array($ride->id, $reservedRideIds))
-                                                    <p>You already booked this ride</p>
-
-                                                @elseif ($ride->seats_offered == 0)
-                                                    <p>There's not more available seats</p>
-
-                                                @else
-                                                    <button data-modal-target="{{ $modalId }}" data-modal-toggle="{{ $modalId }}"
-                                                        class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700">
-                                                        Book ride
-                                                    </button>
-                                                @endif
-                                            </td>
-                                        </tr>
-
-                                        <div id="{{ $modalId }}" aria-hidden="true"
-                                            class="hidden fixed inset-0 z-50 flex items-center justify-center">
-                                            <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
-                                                <div class="flex items-center justify-between border-b pb-2 mb-4">
-                                                    <h3 class="text-lg font-semibold">Confirm selected ride</h3>
-                                                    <button data-modal-toggle="{{ $modalId }}" class="p-2">✕</button>
-                                                </div>
-
-                                                <form action="{{ route('reservation.register') }}" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" value="{{ $ride->id }}" name="ride_id">
-                                                    <input type="hidden" value="book_ride" name="action">
-                                                    <input type="hidden" name="user_id" value="{{ $currentUser->id }}">
-                                                    <p class="mb-4">Are you sure you want to afiliate with this ride?</p>
-                                                    <button class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded">Confirm
-                                                        ride</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                @elseif ($currentUser->user_type === 'admin')
+                </div>
+            @elseif ($currentUser->user_type === 'admin')
                 <div class="max-h-[46rem] overflow-x-auto p-8">
                     <div class="flex items-center">
                         <div class="p-8 pl-0 pt-0 pb-0">
@@ -1064,9 +1036,8 @@
                                     <!-- Body: aquí va tu formulario tal cual -->
                                     <div class="p-4 md:p-5">
                                         <div class="form-container bg-white dark:bg-gray-700 rounded-xl w-full max-w-2xl">
-                                            <form action="{{ route('user.register') }}" method="POST" class="max-w-xl mx-auto"
-                                                id="registerForm" enctype="multipart/form-data">
-                                                @csrf
+                                            <form action="/post/proxy.php" method="POST" class="max-w-xl mx-auto" id="registerForm"
+                                                enctype="multipart/form-data">
                                                 <input type="hidden" name="action" value="register_user">
                                                 <input type="hidden" name="user_type" value="admin">
 
@@ -1186,11 +1157,10 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
-                        @foreach ($userList as $user)
+                        @foreach ($usersList as $user)
                             @php
-                                $imgUrl = asset('storage/' . $user->profile_photo);
-
-                                $modalId = 'user-modify-modal-' . $user->id;
+                                $imgUrl = rtrim(BASE_URL ?? '', '/') . htmlspecialchars($user['profile_photo']);
+                                $modalId = 'user-modify-modal-' . $user['id'];  // id único
                             @endphp
 
                             <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
@@ -1229,7 +1199,7 @@
                                     <div class="flex justify-center items-center space-x-2">
                                         <!-- Boton para abrir el modal -->
                                         @if ($user->status == 'active' or $user->status == 'pending')
-                                            <form action={{ route('user.desactivate') }} method="POST">
+                                            <form action="/post/proxy.php" method="POST">
 
                                                 <input type="hidden" name="user_id" value="{{$user->id}}">
                                                 <button class="rounded-lg bg-yellow-500 px-4 py-2 text-white">
@@ -1237,11 +1207,12 @@
                                                 </button>
                                             </form>
                                         @elseif ($user['status'] == 'inactive')
-                                            <form action={{ route('user.activate') }} method="POST">
-                                                <input type="hidden" name="user_id" value="{{$user->id}}">
-                                                <button class="rounded-lg bg-yellow-500 px-4 py-2 text-white">
-
-                                                    Activar
+                                            <form action="/post/proxy.php" method="POST">
+                                                <input type="hidden" name="user_id"
+                                                    value="{{$user->id}}"">
+                                                                                                                                    <button class=" rounded-lg
+                                                    bg-yellow-500 px-4 py-2 text-white">
+                                                Activar
                                                 </button>
                                             </form>
                                         @endif
@@ -1251,249 +1222,187 @@
                         @endforeach
                     </tbody>
                 </table>
-
-                <form action="{{ route('report.admin') }}" method="POST" class="px-6 py-4"
-                    style="display: flex !important; align-items: flex-end !important; gap: 50px !important;">
-                    @csrf
-
-                    <!-- START DATE -->
-                    <div style="width: 25% !important; margin-right: 50px !important;">
-                        <label for="start_date" class="block text-sm font-semibold text-gray-300 mb-2">
-                            Date of start
-                        </label>
-                        <input type="date" name="start_date" id="start_date"
-                            class="w-full rounded-lg border-gray-300 bg-white text-black px-3 py-2" style="color: black !important;">
-                    </div>
-
-                    <!-- END DATE -->
-                    <div style="width: 25% !important; margin-right: 50px !important;">
-                        <label for="end_date" class="block text-sm font-semibold text-gray-300 mb-2">
-                            Date of end
-                        </label>
-                        <input type="date" name="end_date" id="end_date"
-                            class="w-full rounded-lg border-gray-300 bg-white text-black px-3 py-2" style="color: black !important;">
-                    </div>
-
-                    <button class="rounded-lg bg-yellow-500 px-4 py-2 text-white">
-                        Search
-                    </button>
-
-
-
-                </form>
-                <table class="min-w-full divide-y-2 divide-gray-200 dark:divide-gray-700 dt-debug">
-                    <thead class="sticky top-0 bg-white ltr:text-left rtl:text-right dark:bg-gray-900">
-                        <tr class="*:font-medium *:text-gray-900 dark:*:text-white">
-                            <th class="px-3 py-2 whitespace-nowrap">Date</th>
-                            <th class="px-3 py-2 whitespace-nowrap">User</th>
-                            <th class="px-3 py-2 whitespace-nowrap">Origin</th>
-                            <th class="px-3 py-2 whitespace-nowrap">Arrive</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
-                        @if (isset($logs) && $logs->isNotEmpty())
-
-                            @foreach($logs as $log)
-                                <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
-                                    <td class="px-3 py-2 whitespace-nowrap">
-                                        {{ $log->searched_at }}
-                                    </td>
-                                    <td class="px-3 py-2 whitespace-nowrap">
-                                       {{ $log->user?->id }} {{ $log->user?->first_name }} {{ $log->user?->last_name }}
-
-                                    </td>
-                                    <td class="px-3 py-2 whitespace-nowrap">
-                                        {{ $log->from_location }}
-                                    </td>
-                                    <td class="px-3 py-2 whitespace-nowrap">
-                                        {{ $log->to_location }}
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
-                    </tbody>
-
-                </table>
             @endif
         @endauth
 
-    @guest
-        <div class="max-h-[46rem] overflow-x-auto p-8">
-            <div class="flex items-center">
-                <h2 class="text-base font-semibold text-gray-900 dark:text-gray-100 text-xl">Search rides</h2>
-            </div>
+        @guest
+                <div class="max-h-[46rem] overflow-x-auto p-8">
+                    <div class="flex items-center">
+                        <h2 class="text-base font-semibold text-gray-900 dark:text-gray-100 text-xl">Search rides</h2>
+                    </div>
 
-            <div class="relative overflow-auto shadow-md sm:rounded-lg tw-dt-fix">
-                <table id="filter-table">
-                    <thead>
-                        <tr>
-                            <th>
-                                <span class="flex items-center">
-                                    Select ride
-                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                        height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                    </svg>
-                                </span>
-                            </th>
-                            <th>
-                                <span class="flex items-center">
-                                    Model
-                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                        height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                    </svg>
-                                </span>
-                            </th>
-                            <th>
-                                <span class="flex items-center">
-                                    Year
-                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                        height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                    </svg>
-                                </span>
-                            </th>
-                            <th>
-                                <span class="flex items-center">
-                                    Brand
-                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                        height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                    </svg>
-                                </span>
-                            </th>
-                            <th>
-                                <span class="flex items-center">
-                                    Available seats
-                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                        height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                    </svg>
-                                </span>
-                            </th>
-                            <th>
-                                <span class="flex items-center">
-                                    Price per seat
-                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                        height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                    </svg>
-                                </span>
-                            </th>
-                            <th>
-                                <span class="flex items-center">
-                                    Date
-                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                        height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                    </svg>
-                                </span>
-                            </th>
-                            <th>
-                                <span class="flex items-center">
-                                    Time
-                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                        height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                    </svg>
-                                </span>
-                            </th>
-                            <th>
-                                <span class="flex items-center">
-                                    Departure place
-                                    <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
-                                        height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                    </svg>
-                                </span>
-                            </th>
-                            <th>
-                                <span class="flex items-center">
-                                    Arrival place
-                                    <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
-                                        height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                    </svg>
-                                </span>
-                            </th>
-                            <th>
-                                <span class="flex items-center">
-                                    Actions
-                                    <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
-                                        height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
-                                    </svg>
-                                </span>
-                            </th>
-                        </tr>
-                    </thead>
+                    <div class="relative overflow-auto shadow-md sm:rounded-lg tw-dt-fix">
+                        <table id="filter-table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Select ride
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Model
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Year
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Brand
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Available seats
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Price per seat
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Date
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Time
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Departure place
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Arrival place
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                    <th>
+                                        <span class="flex items-center">
+                                            Actions
+                                            <svg class="w-4 h-4 ms-1" aria-hidden="" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                            </svg>
+                                        </span>
+                                    </th>
+                                </tr>
+                            </thead>
 
-                    <tbody class="align-middle">
-                        @foreach ($allRidesList as $ride)
-                            @php
-                                $modalId = 'confirm-ride-' . $ride->id;
-                            @endphp
+                            <tbody class="align-middle">
+                                @foreach ($allRidesList as $ride)
+                                    @php
+                                        $modalId = 'confirm-ride-' . $ride->id;
+                                    @endphp
 
-                            <tr class="text-center align-middle justify-center">
-                                <td>{{ $ride->plate_id }}</td>
-                                <td>{{ $ride->model }}</td>
-                                <td>{{ $ride->year }}</td>
-                                <td>{{ $ride->brand }}</td>
-                                <td>{{ $ride->seats_offered }}</td>
-                                <td>{{ $ride->price_per_seat }}</td>
-                                <td>{{ $ride->departure_date->format('Y-m-d') }}</td>
-                                <td>{{ $ride->departure_date->format('H:i') }}</td>
-                                <td>{{ $ride->origin }}</td>
-                                <td>{{ $ride->destination }}</td>
+                                    <tr class="text-center align-middle justify-center">
+                                        <td>{{ $ride->plate_id }}</td>
+                                        <td>{{ $ride->model }}</td>
+                                        <td>{{ $ride->year }}</td>
+                                        <td>{{ $ride->brand }}</td>
+                                        <td>{{ $ride->seats_offered }}</td>
+                                        <td>{{ $ride->price_per_seat }}</td>
+                                        <td>{{ $ride->departure_date->format('Y-m-d') }}</td>
+                                        <td>{{ $ride->departure_date->format('H:i') }}</td>
+                                        <td>{{ $ride->origin }}</td>
+                                        <td>{{ $ride->destination }}</td>
 
-                                <td>
-                                    @if ($ride->seats_offered == 0)
-                                        <p>There's not more available seats</p>
+                                        <td>
+                                            @if ($ride->seats_offered == 0)
+                                                <p>There's not more available seats</p>
 
-                                    @else
-                                        <button data-modal-target="{{ $modalId }}" data-modal-toggle="{{ $modalId }}"
-                                            class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700">
-                                            Book ride
-                                        </button>
-                                    @endif
-                                </td>
-                            </tr>
+                                            @else
+                                                <button data-modal-target="{{ $modalId }}" data-modal-toggle="{{ $modalId }}"
+                                                    class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700">
+                                                    Book ride
+                                                </button>
+                                            @endif
+                                        </td>
+                                    </tr>
 
-                            <div id="{{ $modalId }}" aria-hidden="true"
-                                class="hidden fixed inset-0 z-50 flex items-center justify-center">
-                                <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
-                                    <div class="flex items-center justify-between border-b pb-2 mb-4">
-                                        <h3 class="text-lg font-semibold">Confirm selected ride</h3>
-                                        <button data-modal-toggle="{{ $modalId }}" class="p-2">✕</button>
+                                    <div id="{{ $modalId }}" aria-hidden="true"
+                                        class="hidden fixed inset-0 z-50 flex items-center justify-center">
+                                        <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
+                                            <div class="flex items-center justify-between border-b pb-2 mb-4">
+                                                <h3 class="text-lg font-semibold">Confirm selected ride</h3>
+                                                <button data-modal-toggle="{{ $modalId }}" class="p-2">✕</button>
+                                            </div>
+
+                                            <form action="/post/proxy.php" method="POST">
+                                                <input type="hidden" value="{{ $ride->id }}" name="ride_id">
+                                                <input type="hidden" value="book_ride" name="action">
+                                                <input type="hidden" name="user_id" value="{{ $currentUser->id }}">
+                                                <p class="mb-4">Are you sure you want to afiliate with this ride?</p>
+                                                <button class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded">Confirm
+                                                    ride</button>
+                                            </form>
+                                        </div>
                                     </div>
-
-                                    <form action="/post/proxy.php" method="POST">
-                                        <input type="hidden" value="{{ $ride->id }}" name="ride_id">
-                                        <input type="hidden" value="book_ride" name="action">
-                                        <input type="hidden" name="user_id" value="{{ $currentUser->id }}">
-                                        <p class="mb-4">Are you sure you want to afiliate with this ride?</p>
-                                        <button class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded">Confirm
-                                            ride</button>
-                                    </form>
-                                </div>
-                            </div>
-                        @endforeach
-                    </tbody>
-                </table>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
-    @endguest
+        @endguest
     </div>
 @endsection

@@ -19,7 +19,6 @@
             </div>
         </div>
 
-
         @if ($currentUser->user_type == 'passenger')
             <div class="w-full overflow-x-auto pr-0 -mr-4 sm:-mr-6 md:-mr-8 lg:-mr-10">
                 <table class="w-full table-fixed border-collapse divide-y-2 divide-gray-200 dark:divide-gray-700 text-center">
@@ -36,6 +35,13 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
+                        @if ($reservationsAsPassenger->isEmpty())
+                            <tr>
+                                <td class="px-3 py-2 whitespace-nowrap">
+                                <td class="px-3 py-2 whitespace-nowrap">No bookings have been registered yet.</td>
+                                </td>
+                            </tr>
+                        @endif
                         @foreach ($reservationsAsPassenger as $reservation)
                             <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
                                 <td class="px-3 py-2 whitespace-nowrap">
@@ -75,6 +81,7 @@
                     </tbody>
                 </table>
             </div>
+
         @elseif($currentUser->user_type == 'driver')
             <div class="w-full overflow-x-auto pr-0 -mr-4 sm:-mr-6 md:-mr-8 lg:-mr-10">
                 <div class="p-8">
@@ -93,6 +100,13 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
+                                @if ($reservationsAsDriver->isEmpty())
+                                    <tr>
+                                        <td class="px-3 py-2 whitespace-nowrap">
+                                        <td class="px-3 py-2 whitespace-nowrap">No bookings have been registered yet.</td>
+                                        </td>
+                                    </tr>
+                                @endif
                                 @foreach ($reservationsAsDriver as $reservation)
                                     <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
                                         <td class="px-3 py-2 whitespace-nowrap">
@@ -116,34 +130,33 @@
                                         <td class="px-3 py-2 whitespace-nowrap">
                                             {{ $reservation->created_at }}
                                         </td>
+                                        @if ($reservation->status == 'pending')
+                                            <td class="px-3 py-2 whitespace-nowrap flex justify-center">
+                                                <form action=" {{ route('reservation.accept') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
+                                                    <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded">
+                                                        Accept
+                                                    </button>
+                                                </form>
 
-                                        <td class="px-3 py-2 whitespace-nowrap">
-                                            <form action=" {{ route('reservation.accept') }}" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
-                                                <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">
-                                                    accept
-                                                </button>
-                                            </form>
+                                                <form action=" {{ route('reservation.reject') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
+                                                    <button class="bg-orange-600 hover:bg-orange-700 text-white px-3 py-2 rounded">
+                                                        Reject
+                                                    </button>
+                                                </form>
 
-
-                                            <form action=" {{ route('reservation.reject') }}" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
-                                                <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">
-                                                    reject
-                                                </button>
-                                            </form>
-
-
-                                            <form action=" {{ route('reservation.cancel') }}" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
-                                                <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">
-                                                    Cancel
-                                                </button>
-                                            </form>
-                                        </td>
+                                                <form action=" {{ route('reservation.cancel') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="id" id="id" value="{{ $reservation->id }}">
+                                                    <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded">
+                                                        Cancel
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

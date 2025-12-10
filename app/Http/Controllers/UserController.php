@@ -13,7 +13,6 @@ class UserController extends Controller
 {
     public function store(Request $request)
     {
-       
         // validar datos
         $data = $request->validate([
             'floating_id' => 'string|unique:users,id',
@@ -56,8 +55,6 @@ class UserController extends Controller
             'verify_token_expires_at' => $verifyExpiresAt,
         ]);
 
-       
-
         // enviar correo de verificacion
         $verifyUrl = route('verify.email', [
             'uid' => $user->id,
@@ -79,7 +76,7 @@ class UserController extends Controller
         }
 
         // redirigir (equivalente a header("Location: /check-your-email"))
-        return redirect('/check-email');
+        return redirect('check-email');
     }
 
     public function update(Request $request, string $id)
