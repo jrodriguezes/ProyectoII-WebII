@@ -17,7 +17,6 @@ class HomeController extends Controller
         $currentUser = auth()->user();
 
         $allRidesList = Ride::with(['vehicle', 'driver'])->get();
-        //dd($allRidesList);
 
         // si el usuario no esta logeado lo que haces mandar al home sin llenar el resto de datos por que da problema
         // por que da problemas que no pueda traer las listas
@@ -34,36 +33,24 @@ class HomeController extends Controller
             ]);
         }
 
-        $vehiclesList = Vehicle::where('driver_id', $currentUser->id)->get();
+        $vehiclesList = Vehicle::where('driver_id', $currentUser->id)->get()->where('status', 'active');
 
-        $ridesList = Ride::where('driver_id', $currentUser->id)->get();
-
-        //dd($ridesList);
-
+        $ridesList = Ride::where('driver_id', $currentUser->id)->get()->where('status', 'active');
+        
         $reservationList = Reservation::all();
-
-        //dd($reservationList);
 
         $userList = User::all();
 
-        //dd($userList);
-
-        $reservedRideIds = Reservation::where('passenger_id', $currentUser->id)
-            ->pluck('ride_id')
-            ->toArray();
+        $reservedRideIds = Reservation::where('passenger_id', $currentUser->id)->pluck('ride_id')->toArray();
 
         return view('home', compact('currentUser', 'vehiclesList', 'ridesList', 'reservationList', 'userList', 'allRidesList', 'reservedRideIds'));
     }
 
-    public function searchRides(Request $request){
+    public function searchRides(Request $request)
+    {
         $currentUser = auth()->user();
-        
-        $allRidesList = Ride::where('origin', $request->origin)
-                    ->where('destination', $request->destination)
-                    ->with(['vehicle', 'driver'])
-                    ->get();
 
-        
+        $allRidesList = Ride::where('origin', $request->origin)->where('destination', $request->destination)->with(['vehicle', 'driver'])->get();
 
         if (!$currentUser) {
             return view('home', [
@@ -82,36 +69,21 @@ class HomeController extends Controller
 
         $ridesList = Ride::where('driver_id', $currentUser->id)->get();
 
-        //dd($ridesList);
-
         $reservationList = Reservation::all();
-
-        //dd($reservationList);
 
         $userList = User::all();
 
-        //dd($userList);
-
-        $reservedRideIds = Reservation::where('passenger_id', $currentUser->id)
-            ->pluck('ride_id')
-            ->toArray();
-
+        $reservedRideIds = Reservation::where('passenger_id', $currentUser->id)->pluck('ride_id')->toArray();
 
         SearchLog::create([
             'user_id' => auth()->id(),
             'from_location' => $request->origin,
             'to_location' => $request->destination,
-            'result_count' => $allRidesList->count() ?? 0,  
+            'result_count' => $allRidesList->count() ?? 0,
             'searched_at' => now()
-            
-        ]);    
+        ]);
 
         return view('home', compact('currentUser', 'vehiclesList', 'ridesList', 'reservationList', 'userList', 'allRidesList', 'reservedRideIds'));
-
- 
     }
-
-     
 }
-
 ?>

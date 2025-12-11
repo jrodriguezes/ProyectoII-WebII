@@ -47,6 +47,12 @@ Route::get('/edit-profile', [EditProfileController::class, 'index'])->name('edit
 // Usuario
 Route::post('/user-register', [UserController::class, 'store'])->name('user.register');
 
+// Modificar usuario
+Route::post('/users/{id}/modify', [UserController::class, 'update'])->name('users.modify');
+
+Route::post('/home/user/deactivate',[UserController::class, 'deactivateUser'])->name('user.deactivate');
+
+Route::post('/home/user/activate',[UserController::class, 'activateUser'])->name('user.activate');
 // Login & Verification de email 
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
 
@@ -61,14 +67,13 @@ Route::post('/login/magic-link', [MagicLoginController::class, 'sendLink'])->nam
 Route::get('/login/magic-link/{token}', [MagicLoginController::class, 'loginWithLink'])->name('magic.login')->middleware('guest');
 
 Route::get('/login-magic-link', function () {
-    return view('login-magic');})->name('login-magic-link');
+    return view('login-magic');
+})->name('login-magic-link');
 
 
-Route::post('/home', [UserController::class, 'activateUser'])
-    ->name('user.activate'); 
+Route::post('/home', [UserController::class, 'activateUser'])->name('user.activate');
 
-Route::post('/home', [UserController::class, 'desactivateUser'])
-    ->name('user.desactivate'); 
+Route::post('/home', [UserController::class, 'desactivateUser'])->name('user.desactivate');
 
 
 // Vehiculo
@@ -94,16 +99,6 @@ Route::post('/home/reservation/cancel', [ReservationController::class, 'cancel']
 Route::post('/home/reservation/accept', [ReservationController::class, 'accept'])->name('reservation.accept');
 
 Route::post('/home/reservation/reject', [ReservationController::class, 'reject'])->name('reservation.reject');
-
-
-// Modificar usuario
-Route::post('/users/{id}/modify', [UserController::class, 'update'])->name('users.modify');
-
-// Eliminar usuario
-Route::post('/users/{id}/delete', [UserController::class, 'delete'])->name('users.delete');
-
-// Activar usuario
-Route::post('/users/{id}/activate', [UserController::class, 'activate'])->name('users.activate');
 
 // booking
 Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');

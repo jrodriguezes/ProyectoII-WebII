@@ -12,6 +12,10 @@ class BookingController extends Controller
     {
         $currentUser = auth()->user();
 
+        if (!$currentUser) {
+            return redirect()->route('login');
+        }
+
         if ($currentUser->user_type == "passenger") {
 
             $reservationsAsPassenger = Reservation::with([
