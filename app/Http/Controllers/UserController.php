@@ -100,7 +100,6 @@ class UserController extends Controller
         $user->last_name = $data['floating_last_name'];
         $user->birth_date = $data['date'];
         $user->phone_number = $data['floating_phone'];
-        $user->user_type = $data['user_type'];
 
         //  foto nueva (opcional)
         if ($request->hasFile('photo')) {

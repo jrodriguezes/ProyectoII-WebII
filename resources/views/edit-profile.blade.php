@@ -22,11 +22,6 @@
                         <div>
                             @include('components.theme-toggle')
                         </div>
-                        @if (!in_array($currentUser->user_type, ['driver&passenger', 'admin']))
-                            <div class="h-8">@include('components.toggle')</div>
-                        @elseif ($currentUser->user_type !== 'driver' and $currentUser->user_type !== 'passenger')
-                            <input type="hidden" name="user_type" value="{{ $currentUser->user_type }}}">
-                        @endif
                     </div>
                 </div>
                 <div class="grid md:grid-cols-2 md:gap-6">

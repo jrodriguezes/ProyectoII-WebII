@@ -12,10 +12,14 @@ return new class extends Migration {
     {
         Schema::create('search_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+
+            // FK correcta porque users.id es char(9)
+            $table->char('user_id', 9);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            
             $table->string('from_location');
             $table->string('to_location');
-            $table->string('result_count');
+            $table->unsignedInteger('result_count');
             $table->timestamp('searched_at')->nullable();
             $table->timestamps();
         });
