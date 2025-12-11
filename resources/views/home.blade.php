@@ -6,7 +6,7 @@
 
     <div class="min-h-full w-full ">
         <div>
-            @include('layouts.navbar');
+            @include('layouts.navbar')
         </div>
         <div class="ml-8">
             <div class="flex items-center">
@@ -97,9 +97,9 @@
                                             </label>
                                             <select id="departure" name="origin"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                                                                                                        focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
-                                                                                                        dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
-                                                                                                        dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                                                                                                                        focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
+                                                                                                                                                        dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
+                                                                                                                                                        dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                 <option selected>Select place of arrival</option>
                                                 <option value="ciudadquesada">Ciudad Quesada</option>
                                                 <option value="florencia">Florencia</option>
@@ -123,9 +123,9 @@
                                             </label>
                                             <select id="arrival" name="destination"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                                                                                                        focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
-                                                                                                        dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
-                                                                                                        dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                                                                                                                        focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
+                                                                                                                                                        dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
+                                                                                                                                                        dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                 <option selected>Select place of departure</option>
                                                 <option value="ciudadquesada">Ciudad Quesada</option>
                                                 <option value="florencia">Florencia</option>
@@ -199,7 +199,7 @@
                         </thead>
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
-                            @if (empty($ridesList))
+                            @if ($ridesList->isEmpty())
                                 <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white ">
                                     <td class="px-3 py-2 whitespace-nowrap">No rides have been registered yet.</td>
                                 </tr>
@@ -573,7 +573,7 @@
                         </thead>
 
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
-                            @if (empty($vehiclesList))
+                            @if ($vehiclesList->isEmpty())
                                 <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white ">
                                     <td class="px-3 py-2 whitespace-nowrap">No vehicles have been registered yet.</td>
                                 </tr>
@@ -659,10 +659,10 @@
                                                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color</label>
                                                                     <select id="color" name="color"
                                                                         class=" bg-gray-50 border border-gray-300 text-gray-900
-                                                                                                                                                                                                                    text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500
-                                                                                                                                                                                                                    block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500
-                                                                                                                                                                                                                    dark:placeholder-gray-400 dark:text-white
-                                                                                                                                                                                                                    dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                                                                                                                                                                                                                                                                    text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500
+                                                                                                                                                                                                                                                                                                    block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500
+                                                                                                                                                                                                                                                                                                    dark:placeholder-gray-400 dark:text-white
+                                                                                                                                                                                                                                                                                                    dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                                         <option value="{{ $vehicle->color }}"
                                                                             selected="{{ $vehicle->color }}">Selected
                                                                             color:{{ $vehicle->color }}
@@ -710,7 +710,7 @@
                                                                 <div class="col-span-2">
                                                                     <h2
                                                                         class=" block mb-2 text-sm font-medium text-gray-900
-                                                                                                                                                                                                    dark:text-white">
+                                                                                                                                                                                                                                                                                    dark:text-white">
                                                                         Vehicle
                                                                         picture
                                                                         </h-2>
@@ -816,8 +816,8 @@
                             </label>
                             <input type="text" name="origin" id="origin" required
                                 class="w-full rounded-lg border-gray-300 bg-white px-3 py-2
-                                                                                                                                                                                                                                                                                                                                                                                      focus:ring-indigo-500 focus:border-indigo-500
-                                                                                                                                                                                                                                                                                                                                                                                      placeholder-[#000000] placeholder-opacity-100"
+                                                                                                                                                                                                                                                                                                                                                                                                                                      focus:ring-indigo-500 focus:border-indigo-500
+                                                                                                                                                                                                                                                                                                                                                                                                                                      placeholder-[#000000] placeholder-opacity-100"
                                 style="color:#000 !important;" placeholder="Origin">
                         </div>
 
@@ -828,8 +828,8 @@
                             </label>
                             <input type="text" name="destination" id="destination" required
                                 class="w-full rounded-lg border-gray-300 bg-white px-3 py-2
-                                                                                                                                                                                                                                                                                                                                                                                      focus:ring-indigo-500 focus:border-indigo-500
-                                                                                                                                                                                                                                                                                                                                                                                      placeholder-[#000000] placeholder-opacity-100"
+                                                                                                                                                                                                                                                                                                                                                                                                                                      focus:ring-indigo-500 focus:border-indigo-500
+                                                                                                                                                                                                                                                                                                                                                                                                                                      placeholder-[#000000] placeholder-opacity-100"
                                 style="color:#000 !important;" placeholder="Destination">
                         </div>
 
@@ -1028,6 +1028,7 @@
                         </table>
                     </div>
                 </div>
+
             @elseif ($currentUser->user_type === 'admin')
                 <div class="max-h-[46rem] overflow-x-auto p-8">
                     <div class="flex items-center">
@@ -1068,8 +1069,9 @@
                                     <!-- Body: aquí va tu formulario tal cual -->
                                     <div class="p-4 md:p-5">
                                         <div class="form-container bg-white dark:bg-gray-700 rounded-xl w-full max-w-2xl">
-                                            <form action="/post/proxy.php" method="POST" class="max-w-xl mx-auto" id="registerForm"
-                                                enctype="multipart/form-data">
+                                            <form action="{{ route('user.register') }}" method="POST" class="max-w-xl mx-auto"
+                                                id="registerForm" enctype="multipart/form-data">
+                                                @csrf
                                                 <input type="hidden" name="action" value="register_user">
                                                 <input type="hidden" name="user_type" value="admin">
 
@@ -1189,10 +1191,11 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
-                        @foreach ($usersList as $user)
+                        @foreach ($userList as $user)
                             @php
-                                $imgUrl = rtrim(BASE_URL ?? '', '/') . htmlspecialchars($user['profile_photo']);
-                                $modalId = 'user-modify-modal-' . $user['id'];  // id único
+                                $imgUrl = asset('storage/' . $user->profile_photo);
+
+                                $modalId = 'user-modify-modal-' . $user->id;
                             @endphp
 
                             <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
@@ -1231,18 +1234,19 @@
                                     <div class="flex justify-center items-center space-x-2">
                                         <!-- Boton para abrir el modal -->
                                         @if ($user->status == 'active' or $user->status == 'pending')
-                                            <form action="/post/proxy.php" method="POST">
-
+                                            <form action={{ route('user.deactivate') }} method="POST">
+                                                @csrf
                                                 <input type="hidden" name="user_id" value="{{$user->id}}">
                                                 <button class="rounded-lg bg-yellow-500 px-4 py-2 text-white">
                                                     Eliminar
                                                 </button>
                                             </form>
                                         @elseif ($user['status'] == 'inactive')
-                                            <form action="/post/proxy.php" method="POST">
+                                            <form action={{ route('user.activate') }} method="POST">
+                                                @csrf
                                                 <input type="hidden" name="user_id" value="{{$user->id}}">
-                                                <button class="
-                                                                        rounded-lg bg-yellow-500 px-4 py-2 text-white">
+                                                <button class="rounded-lg bg-yellow-500 px-4 py-2 text-white">
+
                                                     Activar
                                                 </button>
                                             </form>
@@ -1251,6 +1255,67 @@
                                 </td>
                             </tr>
                         @endforeach
+                    </tbody>
+                </table>
+
+                <form action="{{ route('report.admin') }}" method="POST" class="px-6 py-4"
+                    style="display: flex !important; align-items: flex-end !important; gap: 50px !important;">
+                    @csrf
+
+                    <!-- START DATE -->
+                    <div style="width: 25% !important; margin-right: 50px !important;">
+                        <label for="start_date" class="block text-sm font-semibold text-gray-300 mb-2">
+                            Date of start
+                        </label>
+                        <input type="date" name="start_date" id="start_date"
+                            class="w-full rounded-lg border-gray-300 bg-white text-black px-3 py-2"
+                            style="color: black !important;">
+                    </div>
+
+                    <!-- END DATE -->
+                    <div style="width: 25% !important; margin-right: 50px !important;">
+                        <label for="end_date" class="block text-sm font-semibold text-gray-300 mb-2">
+                            Date of end
+                        </label>
+                        <input type="date" name="end_date" id="end_date"
+                            class="w-full rounded-lg border-gray-300 bg-white text-black px-3 py-2"
+                            style="color: black !important;">
+                    </div>
+
+                    <button class="rounded-lg bg-yellow-500 px-4 py-2 text-white">
+                        Search
+                    </button>
+
+                </form>
+                <table class="min-w-full divide-y-2 divide-gray-200 dark:divide-gray-700 dt-debug">
+                    <thead class="sticky top-0 bg-white ltr:text-left rtl:text-right dark:bg-gray-900">
+                        <tr class="*:font-medium *:text-gray-900 dark:*:text-white">
+                            <th class="px-3 py-2 whitespace-nowrap">Date</th>
+                            <th class="px-3 py-2 whitespace-nowrap">User</th>
+                            <th class="px-3 py-2 whitespace-nowrap">Origin</th>
+                            <th class="px-3 py-2 whitespace-nowrap">Arrive</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
+                        @if (isset($logs) && $logs->isNotEmpty())
+
+                            @foreach($logs as $log)
+                                <tr class="*:text-gray-900 *:first:font-medium dark:*:text-white">
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        {{ $log->searched_at }}
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        {{ $log->user?->id }} {{ $log->user?->first_name }} {{ $log->user?->last_name }}
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        {{ $log->from_location }}
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        {{ $log->to_location }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
                     </tbody>
                 </table>
             @endif
@@ -1386,21 +1451,19 @@
                                     @endphp
 
                                     <tr class="text-center align-middle justify-center">
-                                        <td>{{ $ride->plate_id }}</td>
-                                        <td>{{ $ride->model }}</td>
-                                        <td>{{ $ride->year }}</td>
-                                        <td>{{ $ride->brand }}</td>
+                                        <td>{{ $ride->vehicle->plate_id }}</td>
+                                        <td>{{ $ride->vehicle->model }}</td>
+                                        <td>{{ $ride->vehicle->year }}</td>
+                                        <td>{{ $ride->vehicle->brand }}</td>
                                         <td>{{ $ride->seats_offered }}</td>
                                         <td>{{ $ride->price_per_seat }}</td>
                                         <td>{{ $ride->departure_date->format('Y-m-d') }}</td>
                                         <td>{{ $ride->departure_date->format('H:i') }}</td>
                                         <td>{{ $ride->origin }}</td>
                                         <td>{{ $ride->destination }}</td>
-
                                         <td>
                                             @if ($ride->seats_offered == 0)
                                                 <p>There's not more available seats</p>
-
                                             @else
                                                 <a href="login"
                                                     class="inline-flex items-center rounded-lg bg-green-600 px-5 py-2.5 text-xs font-medium uppercase leading-normal text-white shadow transition hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 active:bg-green-700">

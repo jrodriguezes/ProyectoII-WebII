@@ -160,14 +160,17 @@ class UserController extends Controller
         return view('email-verified');
     }
 
-    public function activateUser(Request $request){
+    public function activateUser(Request $request)
+    {
 
-        User::where('uid', $request->uid)->update(['status'=> 'active']);   
+        User::where('id', $request->user_id)->update(['status' => 'active']);
+        return redirect()->route('home');
     }
 
-    public function desactivateUser(Request $request){
-
-        User::where('uid', $request->uid)->update(['status'=> 'inactive']);
+    public function deactivateUser(Request $request)
+    {
+        User::where('id', $request->user_id)->update(['status' => 'inactive']);
+        return redirect()->route('home');
     }
 
 
