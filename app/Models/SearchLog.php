@@ -15,6 +15,7 @@ class SearchLog extends Model
         'user_id',
         'from_location',
         'to_location',
+        'result_count',
         'searched_at',
     ];
 

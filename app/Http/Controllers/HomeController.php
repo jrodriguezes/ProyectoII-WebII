@@ -63,12 +63,7 @@ class HomeController extends Controller
                     ->with(['vehicle', 'driver'])
                     ->get();
 
-        SearchLog::create([
-            'user_id' => auth()->id(),
-            'from_location' => $request->origin,
-            'to_location' => $request->destination,
-            'searched_at' => now()
-        ]);
+        
 
         if (!$currentUser) {
             return view('home', [
@@ -100,6 +95,16 @@ class HomeController extends Controller
         $reservedRideIds = Reservation::where('passenger_id', $currentUser->id)
             ->pluck('ride_id')
             ->toArray();
+
+
+        SearchLog::create([
+            'user_id' => auth()->id(),
+            'from_location' => $request->origin,
+            'to_location' => $request->destination,
+            'result_count' => $allRidesList->count() ?? 0,  
+            'searched_at' => now()
+            
+        ]);    
 
         return view('home', compact('currentUser', 'vehiclesList', 'ridesList', 'reservationList', 'userList', 'allRidesList', 'reservedRideIds'));
 

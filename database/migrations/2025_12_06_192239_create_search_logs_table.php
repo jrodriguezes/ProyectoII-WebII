@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('from_location');
             $table->string('to_location');
+            $table->string('result_count');
             $table->timestamp('searched_at')->nullable();
             $table->timestamps();
         });
