@@ -97,9 +97,9 @@
                                             </label>
                                             <select id="departure" name="origin"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                                                                                            focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
-                                                                                            dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
-                                                                                            dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                                                                        focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
+                                                                                                        dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
+                                                                                                        dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                 <option selected>Select place of arrival</option>
                                                 <option value="ciudadquesada">Ciudad Quesada</option>
                                                 <option value="florencia">Florencia</option>
@@ -123,9 +123,9 @@
                                             </label>
                                             <select id="arrival" name="destination"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                                                                                            focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
-                                                                                            dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
-                                                                                            dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                                                                        focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
+                                                                                                        dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
+                                                                                                        dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                 <option selected>Select place of departure</option>
                                                 <option value="ciudadquesada">Ciudad Quesada</option>
                                                 <option value="florencia">Florencia</option>
@@ -659,10 +659,10 @@
                                                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color</label>
                                                                     <select id="color" name="color"
                                                                         class=" bg-gray-50 border border-gray-300 text-gray-900
-                                                                                                                                                                                                text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500
-                                                                                                                                                                                                block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500
-                                                                                                                                                                                                dark:placeholder-gray-400 dark:text-white
-                                                                                                                                                                                                dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                                                                                                                                                                                    text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500
+                                                                                                                                                                                                                    block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500
+                                                                                                                                                                                                                    dark:placeholder-gray-400 dark:text-white
+                                                                                                                                                                                                                    dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                                         <option value="{{ $vehicle->color }}"
                                                                             selected="{{ $vehicle->color }}">Selected
                                                                             color:{{ $vehicle->color }}
@@ -710,7 +710,7 @@
                                                                 <div class="col-span-2">
                                                                     <h2
                                                                         class=" block mb-2 text-sm font-medium text-gray-900
-                                                                                                                                                                                dark:text-white">
+                                                                                                                                                                                                    dark:text-white">
                                                                         Vehicle
                                                                         picture
                                                                         </h-2>
@@ -806,6 +806,38 @@
                         <h2 class="text-base font-semibold text-gray-900 dark:text-gray-100 text-xl">Search rides</h2>
                     </div>
 
+                    <form action="{{ route('search.ride') }}" method="post" class="flex items-end gap-4 text-left px-4">
+                        @csrf
+
+                        <!-- ORIGIN -->
+                        <div class="w-1/4">
+                            <label for="origin" class="block text-sm font-medium text-gray-300 mb-1">
+                                Origin
+                            </label>
+                            <input type="text" name="origin" id="origin" required
+                                class="w-full rounded-lg border-gray-300 bg-white px-3 py-2
+                                                                                                                                                                                                                                                                                                                                                                                      focus:ring-indigo-500 focus:border-indigo-500
+                                                                                                                                                                                                                                                                                                                                                                                      placeholder-[#000000] placeholder-opacity-100"
+                                style="color:#000 !important;" placeholder="Origin">
+                        </div>
+
+                        <!-- DESTINATION -->
+                        <div class="w-1/4">
+                            <label for="destination" class="block text-sm font-medium text-gray-300 mb-1">
+                                Destination
+                            </label>
+                            <input type="text" name="destination" id="destination" required
+                                class="w-full rounded-lg border-gray-300 bg-white px-3 py-2
+                                                                                                                                                                                                                                                                                                                                                                                      focus:ring-indigo-500 focus:border-indigo-500
+                                                                                                                                                                                                                                                                                                                                                                                      placeholder-[#000000] placeholder-opacity-100"
+                                style="color:#000 !important;" placeholder="Destination">
+                        </div>
+
+                        <button type="submit"
+                            class="h-[42px] bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 rounded-lg transition">
+                            Search
+                        </button>
+                    </form>
                     <div class="relative overflow-auto shadow-md sm:rounded-lg tw-dt-fix">
                         <table id="filter-table">
                             <thead>
@@ -1208,11 +1240,10 @@
                                             </form>
                                         @elseif ($user['status'] == 'inactive')
                                             <form action="/post/proxy.php" method="POST">
-                                                <input type="hidden" name="user_id"
-                                                    value="{{$user->id}}"">
-                                                                                                                                                        <button class="
-                                                    rounded-lg bg-yellow-500 px-4 py-2 text-white">
-                                                Activar
+                                                <input type="hidden" name="user_id" value="{{$user->id}}">
+                                                <button class="
+                                                                        rounded-lg bg-yellow-500 px-4 py-2 text-white">
+                                                    Activar
                                                 </button>
                                             </form>
                                         @endif
@@ -1378,25 +1409,6 @@
                                             @endif
                                         </td>
                                     </tr>
-
-                                    <div id="{{ $modalId }}" aria-hidden="true"
-                                        class="hidden fixed inset-0 z-50 flex items-center justify-center">
-                                        <div class="bg-white dark:bg-gray-700 rounded-lg shadow p-4 w-full max-w-md">
-                                            <div class="flex items-center justify-between border-b pb-2 mb-4">
-                                                <h3 class="text-lg font-semibold">Confirm selected ride</h3>
-                                                <button data-modal-toggle="{{ $modalId }}" class="p-2">✕</button>
-                                            </div>
-
-                                            <form action="{{ route('login') }}" method="POST">
-                                                <input type="hidden" value="{{ $ride->id }}" name="ride_id">
-                                                <input type="hidden" value="book_ride" name="action">
-
-                                                <p class="mb-4">Are you sure you want to afiliate with this ride?</p>
-                                                <button class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded">Confirm
-                                                    ride</button>
-                                            </form>
-                                        </div>
-                                    </div>
                                 @endforeach
                             </tbody>
                         </table>
