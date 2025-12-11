@@ -1294,6 +1294,7 @@
                             <th class="px-3 py-2 whitespace-nowrap">User</th>
                             <th class="px-3 py-2 whitespace-nowrap">Origin</th>
                             <th class="px-3 py-2 whitespace-nowrap">Arrive</th>
+                            <th class="px-3 py-2 whitespace-nowrap">Result count</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-center">
@@ -1312,6 +1313,9 @@
                                     </td>
                                     <td class="px-3 py-2 whitespace-nowrap">
                                         {{ $log->to_location }}
+                                    </td>
+                                    <td class="px-3 py-2 whitespace-nowrap">
+                                        {{ $log->result_count }}
                                     </td>
                                 </tr>
                             @endforeach
