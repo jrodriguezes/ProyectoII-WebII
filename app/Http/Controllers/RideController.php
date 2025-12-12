@@ -44,9 +44,7 @@ class RideController extends Controller
         return redirect()->back()->with('success', 'Viaje creado correctamente.');
     }
 
-    /**
-     * Modificar ride (equivalente a modify_ride)
-     */
+    
     public function update(Request $request)
     {
         //dd($request->all());
@@ -77,9 +75,7 @@ class RideController extends Controller
         return redirect()->back()->with('success', 'Viaje actualizado correctamente.');
     }
 
-    /**
-     * Eliminar ride (equivalente a delete_ride)
-     */
+    
     public function destroy(Request $request)
     {
         //dd($request->all());

@@ -21,8 +21,7 @@ return new class extends Migration
 
             $table->string('vehicle_picture', 255)->nullable();
 
-            $table->enum('status', ['active', 'inactive'])
-                  ->default('active');
+            $table->enum('status', ['active', 'inactive'])->default('active');
 
             $table->timestamp('created_at')->useCurrent();
         });
