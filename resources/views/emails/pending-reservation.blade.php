@@ -27,6 +27,10 @@
 
     <p>
         Ingresá a la app para aceptar o rechazar la reserva.
+
+
+
+        
     </p>
 
 </body>
