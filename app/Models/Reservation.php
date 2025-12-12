@@ -26,4 +26,15 @@ class Reservation extends Model
     {
         return $this->belongsTo(User::class, 'passenger_id', 'id');
     }
+
+    public function scopePendingOlderThan(Builder $query, int $minutes)
+    {
+        return $query
+            ->where('status', 'pending')
+            ->where('created_at', '<=', now()->subMinutes($minutes))
+            ->with([
+                'ride.driver',     // chofer
+                'passenger'        // pasajero
+            ]);
+    }
 }
