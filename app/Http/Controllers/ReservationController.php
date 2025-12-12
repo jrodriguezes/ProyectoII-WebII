@@ -9,74 +9,73 @@ use App\Models\Ride;
 
 class ReservationController extends Controller
 {
-     /**
-     * Reservar ride (equivalente a book_ride)
-     */
     public function book(Request $request)
     {
         $data = $request->validate([
-            'ride_id'       => 'required|integer',
+            'ride_id' => 'required|integer',
         ]);
 
         //dd($data);
 
         // Crear reserva (tabla reservations)
         Reservation::create([
-            'ride_id'  => $data['ride_id'],
+            'ride_id' => $data['ride_id'],
             'passenger_id' => auth()->id(),
-            'status'   => 'pending',
+            'status' => 'pending',
         ]);
 
         Ride::where('id', $data['ride_id'])->decrement('seats_offered');
-        
+
         return redirect()->back()->with('success', 'Viaje reservado correctamente.');
     }
 
-    /**
-     * Aceptar una reservación (accept_reservation)
-     */
-    public function accept(Request $request)    
+
+    public function accept(Request $request)
     {
-        $request ->validate([
+        $request->validate([
             'id' => 'required|integer',
         ]);
 
         Reservation::where('id', $request->id)->update([
-            'status'=> 'accepted',
+            'status' => 'accepted',
         ]);
 
         return redirect()->back()->with('success', 'Reservación denegada.');
     }
 
-    /**
-     * Rechazar una reservación (reject_reservation)
-     */
+
     public function reject(Request $request)
     {
-        $request ->validate([
+        $request->validate([
             'id' => 'required|integer',
         ]);
 
-        Reservation::where('id', $request->id)->update([
-            'status'=> 'rejected',
+        $reservation = Reservation::find($request->id);
+
+        $reservation->update([
+            'status' => 'rejected',
         ]);
+        
+        Ride::where('id', $reservation->ride_id)->increment('seats_offered');
 
         return redirect()->back()->with('success', 'Reservación denegada.');
-    
+
     }
 
-    /**
-     * Cancelar una reservación (cancel_reservation)
-     */
+
     public function cancel(Request $request)
     {
-        $request ->validate([
+        $request->validate([
             'id' => 'required|integer',
         ]);
 
-        Reservation::where('id', $request->id)->update([
-            'status'=> 'cancelled',
+        $reservation = Reservation::find($request->id);
+
+        $reservation->update([
+            'status' => 'cancelled',
         ]);
+        
+        Ride::where('id', $reservation->ride_id)->increment('seats_offered');
 
         return redirect()->back()->with('success', 'Reservación cancelada.');
     }

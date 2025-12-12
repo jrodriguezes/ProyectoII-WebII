@@ -13,6 +13,8 @@ class UserController extends Controller
 {
     public function store(Request $request)
     {
+
+        //dd($request->all());
         // validar datos
         $data = $request->validate([
             'floating_id' => 'string|unique:users,id',
