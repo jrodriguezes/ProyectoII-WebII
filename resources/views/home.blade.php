@@ -97,9 +97,9 @@
                                             </label>
                                             <select id="departure" name="origin"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                                                                                                                                                        focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
-                                                                                                                                                        dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
-                                                                                                                                                        dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                                                                                                                                                                                    focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
+                                                                                                                                                                                                                    dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
+                                                                                                                                                                                                                    dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                 <option selected>Select place of arrival</option>
                                                 <option value="ciudadquesada">Ciudad Quesada</option>
                                                 <option value="florencia">Florencia</option>
@@ -123,9 +123,9 @@
                                             </label>
                                             <select id="arrival" name="destination"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                                                                                                                                                        focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
-                                                                                                                                                        dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
-                                                                                                                                                        dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                                                                                                                                                                                    focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 
+                                                                                                                                                                                                                    dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 
+                                                                                                                                                                                                                    dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                 <option selected>Select place of departure</option>
                                                 <option value="ciudadquesada">Ciudad Quesada</option>
                                                 <option value="florencia">Florencia</option>
@@ -659,10 +659,10 @@
                                                                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color</label>
                                                                     <select id="color" name="color"
                                                                         class=" bg-gray-50 border border-gray-300 text-gray-900
-                                                                                                                                                                                                                                                                                                    text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500
-                                                                                                                                                                                                                                                                                                    block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500
-                                                                                                                                                                                                                                                                                                    dark:placeholder-gray-400 dark:text-white
-                                                                                                                                                                                                                                                                                                    dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                                                                                                                                                                                                                                                                                                                                                                        text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500
+                                                                                                                                                                                                                                                                                                                                                                                                        block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500
+                                                                                                                                                                                                                                                                                                                                                                                                        dark:placeholder-gray-400 dark:text-white
+                                                                                                                                                                                                                                                                                                                                                                                                        dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                                         <option value="{{ $vehicle->color }}"
                                                                             selected="{{ $vehicle->color }}">Selected
                                                                             color:{{ $vehicle->color }}
@@ -710,7 +710,7 @@
                                                                 <div class="col-span-2">
                                                                     <h2
                                                                         class=" block mb-2 text-sm font-medium text-gray-900
-                                                                                                                                                                                                                                                                                    dark:text-white">
+                                                                                                                                                                                                                                                                                                                                                                                        dark:text-white">
                                                                         Vehicle
                                                                         picture
                                                                         </h-2>
@@ -815,10 +815,8 @@
                                 Origin
                             </label>
                             <input type="text" name="origin" id="origin" required
-                                class="w-full rounded-lg border-gray-300 bg-white px-3 py-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                      focus:ring-indigo-500 focus:border-indigo-500
-                                                                                                                                                                                                                                                                                                                                                                                                                                      placeholder-[#000000] placeholder-opacity-100"
-                                style="color:#000 !important;" placeholder="Origin">
+                                class="block py-2.5 px-0 w-full text-sm text-blue-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder="Origin">
                         </div>
 
                         <!-- DESTINATION -->
@@ -827,14 +825,11 @@
                                 Destination
                             </label>
                             <input type="text" name="destination" id="destination" required
-                                class="w-full rounded-lg border-gray-300 bg-white px-3 py-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                      focus:ring-indigo-500 focus:border-indigo-500
-                                                                                                                                                                                                                                                                                                                                                                                                                                      placeholder-[#000000] placeholder-opacity-100"
-                                style="color:#000 !important;" placeholder="Destination">
+                                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                placeholder="Destination">
                         </div>
 
-                        <button type="submit"
-                            class="h-[42px] bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 rounded-lg transition">
+                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded">
                             Search
                         </button>
                     </form>

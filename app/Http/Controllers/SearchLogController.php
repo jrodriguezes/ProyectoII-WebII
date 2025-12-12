@@ -26,7 +26,6 @@ class SearchLogController extends Controller
             'searched_at' => now()
         ]);
 
-
         return redirect()->back()->with('success', 'Search saved successfully.');
     }
 
