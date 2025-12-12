@@ -8,7 +8,7 @@
 
 <body>
 
-    <h2>Hola {{ $driver->full_name }}</h2>
+    <h2>Hola {{ $driver->first_name }}</h2>
 
     <p>
         Tenés una reserva pendiente desde hace
@@ -23,7 +23,7 @@
     </ul>
 
     <h3>Pasajero</h3>
-    <p>{{ $passenger->full_name }}</p>
+    <p>{{ $passenger->first_name }}</p>
 
     <p>
         Ingresá a la app para aceptar o rechazar la reserva.
