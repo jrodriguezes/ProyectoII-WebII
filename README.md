@@ -1,59 +1,78 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Documentación del Proyecto: Aventones
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Descripción General
+**Aventones** es una aplicación web desarrollada en **Laravel** diseñada para facilitar el *carpooling* (viajes compartidos). La plataforma conecta a conductores que tienen asientos disponibles en sus vehículos con pasajeros que buscan viajar a los mismos destinos. 
 
-## About Laravel
+## Arquitectura y Tecnologías
+- **Framework Backend:** Laravel (PHP)
+- **Base de Datos:** MySQL / Relacional (utiliza Eloquent ORM)
+- **Frontend:** Blade Templates con Tailwind CSS.
+- **Autenticación:** Sistema propio de usuarios con sesión tradicional, verificación de correo y sistema de *Magic Links* (login sin contraseña).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Modelos Principales (Entidades de la Base de Datos)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+El sistema gira en torno a varias entidades clave, reflejadas en sus respectivos modelos (`app\Models`):
 
-## Learning Laravel
+1. **User (Usuario):**
+   - **Tipos de usuario:** Puede ser `passenger` (pasajero), conductor, o administrador.
+   - **Campos destacados:** ID único alfanumérico (`char(9)`), foto de perfil, estado de la cuenta (`pending`, `active`, `inactive`), y manejo de tokens para la verificación de correo electrónico.
+   - **Relaciones:** Un usuario puede tener múltiples vehículos (si es conductor), publicar múltiples viajes (`rides`) y realizar múltiples reservaciones (`reservations`).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+2. **Vehicle (Vehículo):**
+   - Representa los autos registrados por los conductores.
+   - Están vinculados al conductor a través del `driver_id`.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. **Ride (Viaje / Aventón):**
+   - Creado por los conductores.
+   - Contiene la información del viaje: origen, destino, fecha, hora y asientos disponibles.
 
-## Laravel Sponsors
+4. **Reservation (Reservación):**
+   - El enlace entre un Pasajero y un Viaje (`Ride`).
+   - Tiene estados dinámicos: un pasajero "reserva" un asiento, y el conductor puede "aceptar" o "rechazar" dicha reservación. El pasajero también puede "cancelarla".
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+5. **SearchLog (Registro de Búsqueda):**
+   - Almacena información sobre las búsquedas de viajes que realizan los usuarios.
+   - Sirve para que los administradores generen reportes y entiendan la demanda de rutas.
 
-### Premium Partners
+6. **MagicLoginToken:**
+   - Gestiona tokens temporales seguros enviados por correo electrónico para permitir a los usuarios iniciar sesión con un enlace mágico.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## Flujos de Usuario y Funcionalidades Clave
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 1. Sistema de Autenticación y Cuentas
+- **Registro de Usuarios:** Los usuarios proporcionan sus datos básicos y una foto de perfil. La cuenta inicia en estado `pending`.
+- **Verificación de Correo:** Al registrarse, se envía un correo con un token único. Al hacer clic en el enlace, la cuenta pasa a estado `active`.
+- **Login Tradicional:** Con credenciales convencionales.
+- **Login Mágico (Magic Link):** Una alternativa moderna donde el usuario solicita un acceso por correo, recibe un enlace temporal, y al hacer clic, entra directamente a su cuenta sin contraseña.
+- **Gestión de Perfil:** Los usuarios pueden modificar su información personal y foto de perfil (`/edit-profile`).
 
-## Code of Conduct
+### 2. Flujo del Conductor
+- **Gestión de Vehículos:** Pueden añadir, editar o eliminar vehículos de su propiedad.
+- **Publicación de Viajes:** Pueden publicar nuevos viajes especificando los detalles de la ruta y capacidad del vehículo.
+- **Gestión de Pasajeros:** Reciben solicitudes de reservación y tienen la autoridad para aceptar o rechazar pasajeros en sus viajes publicados.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 3. Flujo del Pasajero
+- **Búsqueda de Viajes:** Pueden buscar viajes disponibles a su destino en la pantalla principal (`/home/ride`).
+- **Reservación:** Solicitan un asiento en el viaje que les interesa.
+- **Gestión de Reservas:** Pueden ver sus reservaciones y cancelarlas si ya no viajarán.
 
-## Security Vulnerabilities
+### 4. Funciones de Administración
+- **Reportes:** Panel de reportes (`/home/report`) para analizar la demanda de rutas mediante `SearchLog`.
+- **Moderación de Cuentas:** Capacidad para activar o desactivar cuentas de usuario (`/home/user/activate` y `/home/user/deactivate`).
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## Rutas y Controladores Principales
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **`UserController`**: Maneja la creación (registro), actualización, eliminación, activación/desactivación de cuentas y la verificación de correo.
+- **`LoginController` & `MagicLoginController`**: Gestionan las sesiones y la autenticación sin contraseña.
+- **`HomeController`**: Controla la vista principal y la lógica de búsqueda de viajes.
+- **`VehicleController`**: Mantenimiento (CRUD) de los vehículos de los usuarios.
+- **`RideController`**: Mantenimiento (CRUD) de las rutas/viajes publicados.
+- **`ReservationController`**: Maneja el ciclo de vida de la reserva (`book`, `cancel`, `accept`, `reject`).
+- **`BookingController`**: Para visualizar las reservas actuales.
+- **`SearchLogController`**: Gestiona las analíticas de búsqueda.
