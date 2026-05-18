@@ -1,78 +1,78 @@
-# Documentación del Proyecto: Aventones
+# Project Documentation: Aventones
 
-## Descripción General
-**Aventones** es una aplicación web desarrollada en **Laravel** diseñada para facilitar el *carpooling* (viajes compartidos). La plataforma conecta a conductores que tienen asientos disponibles en sus vehículos con pasajeros que buscan viajar a los mismos destinos. 
+## Overview
+**Aventones** is a web application developed in **Laravel** designed to facilitate *carpooling* (shared rides). The platform connects drivers who have available seats in their vehicles with passengers looking to travel to the same destinations.
 
-## Arquitectura y Tecnologías
-- **Framework Backend:** Laravel (PHP)
-- **Base de Datos:** MySQL / Relacional (utiliza Eloquent ORM)
-- **Frontend:** Blade Templates con Tailwind CSS.
-- **Autenticación:** Sistema propio de usuarios con sesión tradicional, verificación de correo y sistema de *Magic Links* (login sin contraseña).
+## Architecture and Technologies
+- **Backend Framework:** Laravel (PHP)
+- **Database:** MySQL / Relational (uses Eloquent ORM)
+- **Frontend:** Blade Templates with Tailwind CSS.
+- **Authentication:** Custom user system with traditional sessions, email verification, and a *Magic Links* system (passwordless login).
 
 ---
 
-## Modelos Principales (Entidades de la Base de Datos)
+## Main Models (Database Entities)
 
-El sistema gira en torno a varias entidades clave, reflejadas en sus respectivos modelos (`app\Models`):
+The system revolves around several key entities, reflected in their respective models (`app\Models`):
 
-1. **User (Usuario):**
-   - **Tipos de usuario:** Puede ser `passenger` (pasajero), conductor, o administrador.
-   - **Campos destacados:** ID único alfanumérico (`char(9)`), foto de perfil, estado de la cuenta (`pending`, `active`, `inactive`), y manejo de tokens para la verificación de correo electrónico.
-   - **Relaciones:** Un usuario puede tener múltiples vehículos (si es conductor), publicar múltiples viajes (`rides`) y realizar múltiples reservaciones (`reservations`).
+1. **User:**
+   - **User types:** Can be a `passenger`, driver, or administrator.
+   - **Key fields:** Unique alphanumeric ID (`char(9)`), profile picture, account status (`pending`, `active`, `inactive`), and token management for email verification.
+   - **Relationships:** A user can have multiple vehicles (if they are a driver), publish multiple `rides`, and make multiple `reservations`.
 
-2. **Vehicle (Vehículo):**
-   - Representa los autos registrados por los conductores.
-   - Están vinculados al conductor a través del `driver_id`.
+2. **Vehicle:**
+   - Represents the cars registered by drivers.
+   - They are linked to the driver through the `driver_id`.
 
-3. **Ride (Viaje / Aventón):**
-   - Creado por los conductores.
-   - Contiene la información del viaje: origen, destino, fecha, hora y asientos disponibles.
+3. **Ride:**
+   - Created by the drivers.
+   - Contains the ride information: origin, destination, date, time, and available seats.
 
-4. **Reservation (Reservación):**
-   - El enlace entre un Pasajero y un Viaje (`Ride`).
-   - Tiene estados dinámicos: un pasajero "reserva" un asiento, y el conductor puede "aceptar" o "rechazar" dicha reservación. El pasajero también puede "cancelarla".
+4. **Reservation:**
+   - The link between a Passenger and a `Ride`.
+   - Has dynamic states: a passenger "books" a seat, and the driver can "accept" or "reject" said reservation. The passenger can also "cancel" it.
 
-5. **SearchLog (Registro de Búsqueda):**
-   - Almacena información sobre las búsquedas de viajes que realizan los usuarios.
-   - Sirve para que los administradores generen reportes y entiendan la demanda de rutas.
+5. **SearchLog:**
+   - Stores information about the ride searches performed by users.
+   - Helps administrators generate reports and understand route demand.
 
 6. **MagicLoginToken:**
-   - Gestiona tokens temporales seguros enviados por correo electrónico para permitir a los usuarios iniciar sesión con un enlace mágico.
+   - Manages secure temporary tokens sent via email to allow users to log in with a magic link.
 
 ---
 
-## Flujos de Usuario y Funcionalidades Clave
+## User Flows and Key Features
 
-### 1. Sistema de Autenticación y Cuentas
-- **Registro de Usuarios:** Los usuarios proporcionan sus datos básicos y una foto de perfil. La cuenta inicia en estado `pending`.
-- **Verificación de Correo:** Al registrarse, se envía un correo con un token único. Al hacer clic en el enlace, la cuenta pasa a estado `active`.
-- **Login Tradicional:** Con credenciales convencionales.
-- **Login Mágico (Magic Link):** Una alternativa moderna donde el usuario solicita un acceso por correo, recibe un enlace temporal, y al hacer clic, entra directamente a su cuenta sin contraseña.
-- **Gestión de Perfil:** Los usuarios pueden modificar su información personal y foto de perfil (`/edit-profile`).
+### 1. Authentication and Accounts System
+- **User Registration:** Users provide their basic details and a profile picture. The account starts in a `pending` state.
+- **Email Verification:** Upon registration, an email is sent with a unique token. Clicking the link changes the account to an `active` state.
+- **Traditional Login:** Using conventional credentials.
+- **Magic Login (Magic Link):** A modern alternative where the user requests access via email, receives a temporary link, and upon clicking, logs directly into their account without a password.
+- **Profile Management:** Users can modify their personal information and profile picture (`/edit-profile`).
 
-### 2. Flujo del Conductor
-- **Gestión de Vehículos:** Pueden añadir, editar o eliminar vehículos de su propiedad.
-- **Publicación de Viajes:** Pueden publicar nuevos viajes especificando los detalles de la ruta y capacidad del vehículo.
-- **Gestión de Pasajeros:** Reciben solicitudes de reservación y tienen la autoridad para aceptar o rechazar pasajeros en sus viajes publicados.
+### 2. Driver Flow
+- **Vehicle Management:** They can add, edit, or delete vehicles they own.
+- **Publishing Rides:** They can publish new rides, specifying route details and vehicle capacity.
+- **Passenger Management:** They receive reservation requests and have the authority to accept or reject passengers on their published rides.
 
-### 3. Flujo del Pasajero
-- **Búsqueda de Viajes:** Pueden buscar viajes disponibles a su destino en la pantalla principal (`/home/ride`).
-- **Reservación:** Solicitan un asiento en el viaje que les interesa.
-- **Gestión de Reservas:** Pueden ver sus reservaciones y cancelarlas si ya no viajarán.
+### 3. Passenger Flow
+- **Ride Search:** They can search for available rides to their destination on the main screen (`/home/ride`).
+- **Reservation:** They request a seat on the ride they are interested in.
+- **Reservation Management:** They can view their reservations and cancel them if they are no longer traveling.
 
-### 4. Funciones de Administración
-- **Reportes:** Panel de reportes (`/home/report`) para analizar la demanda de rutas mediante `SearchLog`.
-- **Moderación de Cuentas:** Capacidad para activar o desactivar cuentas de usuario (`/home/user/activate` y `/home/user/deactivate`).
+### 4. Administrative Features
+- **Reports:** Reports dashboard (`/home/report`) to analyze route demand using the `SearchLog`.
+- **Account Moderation:** Ability to activate or deactivate user accounts (`/home/user/activate` and `/home/user/deactivate`).
 
 ---
 
-## Rutas y Controladores Principales
+## Main Routes and Controllers
 
-- **`UserController`**: Maneja la creación (registro), actualización, eliminación, activación/desactivación de cuentas y la verificación de correo.
-- **`LoginController` & `MagicLoginController`**: Gestionan las sesiones y la autenticación sin contraseña.
-- **`HomeController`**: Controla la vista principal y la lógica de búsqueda de viajes.
-- **`VehicleController`**: Mantenimiento (CRUD) de los vehículos de los usuarios.
-- **`RideController`**: Mantenimiento (CRUD) de las rutas/viajes publicados.
-- **`ReservationController`**: Maneja el ciclo de vida de la reserva (`book`, `cancel`, `accept`, `reject`).
-- **`BookingController`**: Para visualizar las reservas actuales.
-- **`SearchLogController`**: Gestiona las analíticas de búsqueda.
+- **`UserController`**: Handles account creation (registration), updating, deletion, activation/deactivation, and email verification.
+- **`LoginController` & `MagicLoginController`**: Manage sessions and passwordless authentication.
+- **`HomeController`**: Controls the main view and ride search logic.
+- **`VehicleController`**: Maintenance (CRUD) for users' vehicles.
+- **`RideController`**: Maintenance (CRUD) for published routes/rides.
+- **`ReservationController`**: Handles the reservation lifecycle (`book`, `cancel`, `accept`, `reject`).
+- **`BookingController`**: To view current reservations.
+- **`SearchLogController`**: Manages search analytics.
